@@ -1,5 +1,7 @@
-public interface IAteqReader
+﻿namespace SDK_Log_Capture_Tool.ATEQ
 {
-    AteqData ReadData();
+    public interface IAteqReader
+    {
+        AteqData ReadData();
+    }
 }
-

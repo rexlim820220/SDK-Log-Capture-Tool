@@ -1,94 +1,57 @@
-# 專案開發流程規劃：檢測儀器 SDK Log 擷取工具
+設備商相關使用手冊
 
-## 專案目標 (Project Goal)
+* [ATEQ_F620簡易手冊](https://github.com/user-attachments/files/22941875/ATEQ_F620.pdf)
+  * [All_Fct_FS6th_Uk1.08.pdf](https://github.com/user-attachments/files/22994624/All_Fct_FS6th_Uk1.08.pdf)
+  * [FG_F6_MODBUS_EN_01_200617.pdf](https://github.com/user-attachments/files/23012009/FG_F6_MODBUS_EN_01_200617.pdf)
+* [鐵木真科技-恒溫水槽風冷](https://github.com/user-attachments/files/22941841/-._250208.pdf)
+* [氮氣填充機使用手冊](https://github.com/user-attachments/files/22941878/Vacuum.Nitrogen.Charging.System_Cooler.Master_User.Manual_v1.00.1.pdf)
 
-開發一個基於 GUI 的測試工具，透過 **RS-232 介面**，實現對以下三種工廠設備的 **Log 擷取、即時顯示與簡易操作**功能，強調**易用性**，確保非程式人員也能操作。
+<img width="1387" height="563" alt="image" src="https://github.com/user-attachments/assets/6fb9549a-a8a0-41e5-ba0b-c75c62cebf3f" />
 
-**核心設備：**
-1.  **ATEQ F620** 測漏機 (Leak Tester)
-2.  **恆溫水槽** (Constant Temperature Water Bath)
-3.  **Cooler Master 氮氣填充器** (N₂ Filler)
+####  Next Steps 
+- Implement ISN validation logic specific to your requirements.
+- Add Modbus RTU code for ATEQ F620 (e.g., using NModbus to send commands like 0x05 to address 0x0001 for starting a cycle).
+- Define protocols for water bath and N₂ filler (e.g., ASCII commands over RS-232).
+- Implement SFIS upload (e.g., HTTP client or SQL connection).
+- Add error handling for RS-232 communication and log saving (e.g., to CSV).
 
-## UI/UX 設計要求 (Design Requirements)
-
-* **結構：** 採用三主分頁結構，每頁對應一個設備。
-* **元素：** 每個分頁必須包含：
-    * `Label`：功能描述/狀態顯示。
-    * `Button`：操作控制 (e.g., 連接/斷開、開始/停止 Log 擷取、清除 Log)。
-    * `TextFrame`：即時 Log 輸出顯示。
-* **易用性：** 按鈕需足夠大，狀態提示需清晰（如顏色警示）。
-
----
-
-## 專案開發流程與階段 (Agile Development Flow)
-
-本專案採敏捷式方法（短迭代週期），分為五個主要階段。
-
-### 階段 1: 需求收集與規劃 (Weeks 1-2)
-
-| 任務 (Task) | 負責人 (Lead) | 預計輸出 (Deliverables) | 風險與應對 (Risk Mitigation) |
-| :--- | :--- | :--- | :--- |
-| 1.1 收集設備 RS-232 規格、指令集、Log 格式。 | 同事A (聯繫) / 您 (分析) | 設備通訊協議文件 | 供應商文件不完整 → 同事A優先索取。 |
-| 1.2 定義 GUI 分頁結構、Button 功能、Log 輸出格式 (e.g., 時間戳記+數據)。 | 您 | 需求規格書 (SRS)、功能清單 | 需求變更 → 設定週會討論，控制變更範圍。 |
-| 1.3 評估技術可行性（硬體串口、Log 儲存）。 | 您 | 初步風險評估 | |
+This layout aligns with the workflow, integrates barcode scanning, and supports SFIS upload while remaining intuitive for non-programmers. If you need specific code for Modbus RTU, SFIS integration, or device-specific protocols, please provide more details (e.g., water bath/N₂ filler command formats or SFIS API specs).
 
 <img width="576" height="304" alt="{C1524B6A-A301-4302-8201-D2FB84AAA5B3}" src="https://github.com/user-attachments/assets/f280f64a-59a5-42dd-ba04-481ac63fc6d1" />
 
 <img width="573" height="304" alt="{F2AE75D9-D010-4096-A6CC-58A8E503B57B}" src="https://github.com/user-attachments/assets/a967163e-316f-4ee5-ac8c-115739242fd0" />
 
-### 階段 2: 設計階段 (Week 2)
+請參考以下control logic:
 
-| 任務 (Task) | 負責人 (Lead) | 預計輸出 (Deliverables) | 風險與應對 (Risk Mitigation) |
-| :--- | :--- | :--- | :--- |
-| 2.1 系統架構設計 (RS-232 模組、Log 解析邏輯、GUI 框架)。 | 您 | 系統架構圖 (Module Design) | 設計過於複雜 → 優先實現 MVP (核心 Log 擷取)。 |
-| 2.2 UI/UX 設計（布局、操作習慣）。 | 您 / 同事A (反饋) | UI Wireframe (Figma/手繪) | UI 不直觀 → 早期徵求操作人員意見。 |
-| 2.3 資料流程設計 (背景執行緒讀取、CSV 匯出設計)。 | 您 | 資料流程圖 | |
+```mermaid
+flowchart TD
+    Start[Start UI Application] --> InputISN[User Scans/Inputs ISN via Barcode Gun]
+    InputISN --> ValidateISN{Validate ISN?}
+    ValidateISN -->|Invalid| ErrorMsg[Display Error Message]
+    ErrorMsg --> InputISN
+    ValidateISN -->|Valid| InitTest[Initiate ATEQ F620 Test via Button]
+    InitTest --> CommSetup[Establish Communication: RS232 or Modbus RTU]
+    CommSetup --> SendCommand[Send Test Command to ATEQ F620]
+    SendCommand --> RunTest[Execute Leak Test on Device]
+    RunTest --> RetrieveData[Retrieve Log Data and Results via Communication]
+    RetrieveData -->|Data Retrieved| DisplayResults[Display Test Results in UI]
+    RetrieveData -->|Error| ErrorRetrieval[Handle Retrieval Error]
+    ErrorRetrieval --> InputISN
+    DisplayResults --> UploadButton[User Clicks Upload to SFIS Button]
+    UploadButton --> UploadData[Upload ISN, Log Values, and Results to SFIS]
+    UploadData -->|Success| SuccessMsg[Display Upload Success]
+    UploadData -->|Failure| FailureMsg[Display Upload Failure]
+    FailureMsg --> UploadButton
+    SuccessMsg --> End[End Process]
+```
 
-### 階段 3: 開發階段 (Weeks 3-4)
+ISN 條碼：代表工件的唯一識別碼，通常由作業員以條碼槍刷入。
 
-| 任務 (Task) | 負責人 (Lead) | 預計輸出 (Deliverables) | 風險與應對 (Risk Mitigation) |
-| :--- | :--- | :--- | :--- |
-| 3.1 實作共用模組 (RS-232 Class, Log Parser)。 | 您 | 程式碼儲存庫 (Git) | 通訊協議不相容 → 參考 SDK 文件逐步除錯。 |
-| 3.2 建置 GUI 框架與三個分頁。 | 您 | 可執行程式原型 (Prototype) | 開發延遲 → 分成小迭代，每週完成一設備分頁。 |
-| 3.3 整合測試 (初步連接硬體或模擬器)。 | 您 / 同事A (環境支援) | | |
+ATEQ F620 通訊：你可以選擇 RS232 或 Modbus RTU，建議封裝通訊模組以便日後切換。
 
-### 階段 4: 測試與優化階段 (Week 5)
+測試結果解析：F620 回傳的 log 通常包含壓力值、洩漏率、測試狀態（PASS/FAIL），需解析並顯示。
 
-| 任務 (Task) | 負責人 (Lead) | 預計輸出 (Deliverables) | 風險與應對 (Risk Mitigation) |
-| :--- | :--- | :--- | :--- |
-| 4.1 單元測試與整合測試（端到端 Log 擷取）。 | 您 | 測試報告 (Test Report) | 硬體不可用 → 使用虛擬串口工具模擬。 |
-| 4.2 使用者測試 (UAT) 與反饋收集。 | 同事A (現場) / 您 (優化) | 優化後程式 | 反饋導致大改 → 優先修復高優先級 Bug。 |
-| 4.3 撰寫使用者手冊 (操作指南)。 | 您 | 使用者手冊 | |
+SFIS 上傳：建議使用 REST API 或 FTP 等方式與 SFIS 系統對接，並記錄上傳狀態。
 
-### 階段 5: 部署與維護階段 (Week 6)
 
-| 任務 (Task) | 負責人 (Lead) | 預計輸出 (Deliverables) | 風險與應對 (Risk Mitigation) |
-| :--- | :--- | :--- | :--- |
-| 5.1 部署與操作人員訓練。 | 您 / 同事A (協調) | 部署包 (Installation Package) | 相容性問題 → 準備備份版本。 |
-| 5.2 專案回顧與 Lessons Learned 記錄。 | 團隊共同 | 維護計畫與回顧文件 | 需求擴張 → 規劃迭代更新 (V2.0)。 |
-
----
-
-## 專案時程表 (Project Schedule)
-
-總時程預計為 **6-9 週** (以 6 週為主要目標，後續為緩衝與優化)。
-
-| 週次 | 預計起始日期 (YYYY/MM/DD) | 主要任務 (Focus) | 里程碑 (Milestone) |
-| :--- | :--- | :--- | :--- |
-| Week 1 | 2025/10/16 | 需求分析、規格收集 (設備通訊) | 完成 SRS 文件 |
-| Week 2 | 2025/10/23 | 系統與 UI/UX 設計 | 完成架構圖與 UI Wireframe |
-| Week 3 | 2025/10/30 | 開發 (共用模組 & ATEQ F620 分頁) | Log 擷取核心功能完成 |
-| Week 4 | 2025/11/06 | 開發 (水槽 & 氮氣分頁) | 程式原型可 Demo (MVP) |
-| Week 5 | 2025/11/13 | 測試與優化 (單元/整合/使用者測試) | 通過現場測試 (UAT) |
-| Week 6 | 2025/11/20 | 部署、訓練、文件、專案回顧 | 專案上線 (V1.0) |
-| Week 7-9 | 2025/11/27 - 12/17 | **緩衝/維護** (Bugfix, Log 匯出功能擴充) | 最終優化版本 |
-
----
-
-## 資源與溝通 (Resources & Communication)
-
-* **溝通頻率：** 每週短會 (30 分鐘) 檢討進度。
-* **追蹤工具：** 建議使用 GitLab Issue Board 進行進度追蹤。
-* **資源考量：** 優先使用免費工具 (Git for 版本控制)。
-* **績效：** 專案里程碑的達成，將作為團隊成員的實質貢獻記錄。
 
