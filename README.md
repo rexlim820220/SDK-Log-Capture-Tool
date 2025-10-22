@@ -32,6 +32,10 @@
 | 1.2 定義 GUI 分頁結構、Button 功能、Log 輸出格式 (e.g., 時間戳記+數據)。 | 您 | 需求規格書 (SRS)、功能清單 | 需求變更 → 設定週會討論，控制變更範圍。 |
 | 1.3 評估技術可行性（硬體串口、Log 儲存）。 | 您 | 初步風險評估 | |
 
+<img width="576" height="304" alt="{C1524B6A-A301-4302-8201-D2FB84AAA5B3}" src="https://github.com/user-attachments/assets/f280f64a-59a5-42dd-ba04-481ac63fc6d1" />
+
+<img width="573" height="304" alt="{F2AE75D9-D010-4096-A6CC-58A8E503B57B}" src="https://github.com/user-attachments/assets/a967163e-316f-4ee5-ac8c-115739242fd0" />
+
 ### 階段 2: 設計階段 (Week 2)
 
 | 任務 (Task) | 負責人 (Lead) | 預計輸出 (Deliverables) | 風險與應對 (Risk Mitigation) |
