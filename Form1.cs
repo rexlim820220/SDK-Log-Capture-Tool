@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 using SDK_Log_Capture_Tool.ATEQ;
 
@@ -7,6 +7,7 @@ namespace SDK_Log_Capture_Tool
     public partial class SDK_Log_Capturer : Form
     {
         private IAteqReader _ateqReader;
+        private AteqStatusMonitor _monitor;
 
         public SDK_Log_Capturer()
         {
@@ -17,7 +18,7 @@ namespace SDK_Log_Capture_Tool
         {
             try
             {
-                _ateqReader = new AteqModbusReader("COM3");
+                _monitor = new AteqStatusMonitor("COM3");
                 txtPressureATEQ.Text = "ATEQ Ready";
             }
             catch (Exception ex)
@@ -111,13 +112,39 @@ namespace SDK_Log_Capture_Tool
         private void btn1UploadSFISWater_Click(object sender, EventArgs e)
         {
             loop1_EndTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            // 這裡可以加入 SFIS 上傳邏輯
+            try
+            {
+                string isn = txt_loop1ISNWater.Text.Trim();
+                string startTime = loop1_STARTTime.Text.Trim();
+                string endTime = loop1_EndTime.Text.Trim();
+
+                if (!string.IsNullOrEmpty(isn))
+                {
+                    dataGrid_Water.Rows.Add(isn, startTime, endTime);
+                }
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         private void btn2UploadSFISWater_Click(object sender, EventArgs e)
         {
             loop2_EndTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            // 這裡可以加入 SFIS 上傳邏輯
+            try
+            {
+                string isn = txt_loop2ISNWater.Text.Trim();
+                string startTime = loop2_STARTTime.Text.Trim();
+                string endTime = loop2_EndTime.Text.Trim();
+
+                if (!string.IsNullOrEmpty(isn))
+                {
+                    dataGrid_Water.Rows.Add(isn, startTime, endTime);
+                }
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         private void btn3UploadSFISWater_Click(object sender, EventArgs e)
@@ -127,10 +154,10 @@ namespace SDK_Log_Capture_Tool
             {
                 //bool isRunning = _ateqReader.IsTestRunning();
                 //lblATEQStatus.Text = isRunning ? "測試中…" : "已完成";
-                
-                string isn = txt_loop1ISNWater.Text.Trim();
-                string startTime = loop1_STARTTime.Text.Trim();
-                string endTime = loop1_EndTime.Text.Trim();
+
+                string isn = txt_loop3ISNWater.Text.Trim();
+                string startTime = loop3_STARTTime.Text.Trim();
+                string endTime = loop3_EndTime.Text.Trim();
 
                 if (!string.IsNullOrEmpty(isn))
                 {
@@ -146,18 +173,36 @@ namespace SDK_Log_Capture_Tool
         private void btn4UploadSFISWater_Click(object sender, EventArgs e)
         {
             loop4_EndTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            // 這裡可以加入 SFIS 上傳邏輯
+            try
+            {
+                string isn = txt_loop4ISNWater.Text.Trim();
+                string startTime = loop4_STARTTime.Text.Trim();
+                string endTime = loop4_EndTime.Text.Trim();
+
+                if (!string.IsNullOrEmpty(isn))
+                {
+                    dataGrid_Water.Rows.Add(isn, startTime, endTime);
+                }
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         private void btnReadLastATEQ_Click(object sender, EventArgs e)
         {
             try
             {
-                var data = _ateqReader.ReadData();
-                txtPressureATEQ.Text = data.Pressure.ToString("F3");
-                txtLeakATEQ.Text = data.Leak.ToString("F3");
-                txtStatusATEQ.Text = data.IsPass ? "PASS" : "FAIL";
-                txtPressureATEQ.Text = "Read Success";
+                if (_monitor.TryGetResult(out var result))
+                {
+                    txtPressureATEQ.Text = result.Parameters["Pressure"].ToString("F3");
+                    txtLeakATEQ.Text = result.Parameters["LeakRate"].ToString("F3");
+                    txtStatusATEQ.Text = result.Status;
+                }
+                else
+                {
+                    txtStatusATEQ.Text = "測試尚未完成或結果無效";
+                }
             }
             catch (Exception ex)
             {

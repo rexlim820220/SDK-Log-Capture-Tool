@@ -1,4 +1,4 @@
-﻿using EasyModbus;
+using EasyModbus;
 
 namespace SDK_Log_Capture_Tool.ATEQ
 {

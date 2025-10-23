@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace SDK_Log_Capture_Tool.ATEQ
 {

@@ -1,4 +1,4 @@
-﻿namespace SDK_Log_Capture_Tool.ATEQ
+namespace SDK_Log_Capture_Tool.ATEQ
 {
     public interface IAteqReader
     {

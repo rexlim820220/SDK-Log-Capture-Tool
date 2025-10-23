@@ -1,4 +1,4 @@
-﻿
+
 namespace SDK_Log_Capture_Tool
 {
     partial class SDK_Log_Capturer
@@ -51,6 +51,9 @@ namespace SDK_Log_Capture_Tool
             this.label_ISN_F620 = new System.Windows.Forms.Label();
             this.Water_Bath_tabPage = new System.Windows.Forms.TabPage();
             this.dataGrid_Water = new System.Windows.Forms.DataGridView();
+            this.dataGrid_Water_ISN = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGrid_Water_StartTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGrid_Water_EndTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.group_loop4 = new System.Windows.Forms.GroupBox();
             this.btn_loop4ResetSFISWater = new System.Windows.Forms.Button();
             this.loop4_EndTime = new System.Windows.Forms.TextBox();
@@ -98,9 +101,6 @@ namespace SDK_Log_Capture_Tool
             this.label_hint_N2Filler = new System.Windows.Forms.Label();
             this.textBox_N2Filler = new System.Windows.Forms.TextBox();
             this.label_N2Filler = new System.Windows.Forms.Label();
-            this.dataGrid_Water_ISN = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGrid_Water_StartTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGrid_Water_EndTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl.SuspendLayout();
             this.ATEQ_F620_TabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFIFOATEQ)).BeginInit();
@@ -346,6 +346,28 @@ namespace SDK_Log_Capture_Tool
             this.dataGrid_Water.Size = new System.Drawing.Size(248, 395);
             this.dataGrid_Water.TabIndex = 14;
             // 
+            // dataGrid_Water_ISN
+            // 
+            this.dataGrid_Water_ISN.HeaderText = "ISN";
+            this.dataGrid_Water_ISN.MinimumWidth = 8;
+            this.dataGrid_Water_ISN.Name = "dataGrid_Water_ISN";
+            this.dataGrid_Water_ISN.Width = 150;
+            // 
+            // dataGrid_Water_StartTime
+            // 
+            this.dataGrid_Water_StartTime.HeaderText = "Start Time";
+            this.dataGrid_Water_StartTime.MinimumWidth = 8;
+            this.dataGrid_Water_StartTime.Name = "dataGrid_Water_StartTime";
+            this.dataGrid_Water_StartTime.ToolTipText = "Start Time";
+            this.dataGrid_Water_StartTime.Width = 150;
+            // 
+            // dataGrid_Water_EndTime
+            // 
+            this.dataGrid_Water_EndTime.HeaderText = "End Time";
+            this.dataGrid_Water_EndTime.MinimumWidth = 8;
+            this.dataGrid_Water_EndTime.Name = "dataGrid_Water_EndTime";
+            this.dataGrid_Water_EndTime.Width = 150;
+            // 
             // group_loop4
             // 
             this.group_loop4.Controls.Add(this.btn_loop4ResetSFISWater);
@@ -365,7 +387,6 @@ namespace SDK_Log_Capture_Tool
             // 
             // btn_loop4ResetSFISWater
             // 
-            this.btn_loop4ResetSFISWater.Enabled = false;
             this.btn_loop4ResetSFISWater.Location = new System.Drawing.Point(640, 54);
             this.btn_loop4ResetSFISWater.Name = "btn_loop4ResetSFISWater";
             this.btn_loop4ResetSFISWater.Size = new System.Drawing.Size(94, 30);
@@ -455,7 +476,6 @@ namespace SDK_Log_Capture_Tool
             // 
             // btn_loop3ResetSFISWater
             // 
-            this.btn_loop3ResetSFISWater.Enabled = false;
             this.btn_loop3ResetSFISWater.Location = new System.Drawing.Point(640, 61);
             this.btn_loop3ResetSFISWater.Name = "btn_loop3ResetSFISWater";
             this.btn_loop3ResetSFISWater.Size = new System.Drawing.Size(94, 30);
@@ -545,7 +565,6 @@ namespace SDK_Log_Capture_Tool
             // 
             // btn_loop2ResetSFISWater
             // 
-            this.btn_loop2ResetSFISWater.Enabled = false;
             this.btn_loop2ResetSFISWater.Location = new System.Drawing.Point(640, 55);
             this.btn_loop2ResetSFISWater.Name = "btn_loop2ResetSFISWater";
             this.btn_loop2ResetSFISWater.Size = new System.Drawing.Size(94, 30);
@@ -637,7 +656,6 @@ namespace SDK_Log_Capture_Tool
             // 
             // btn_loop1ResetSFISWater
             // 
-            this.btn_loop1ResetSFISWater.Enabled = false;
             this.btn_loop1ResetSFISWater.Location = new System.Drawing.Point(640, 55);
             this.btn_loop1ResetSFISWater.Name = "btn_loop1ResetSFISWater";
             this.btn_loop1ResetSFISWater.Size = new System.Drawing.Size(94, 30);
@@ -819,28 +837,6 @@ namespace SDK_Log_Capture_Tool
             this.label_N2Filler.Size = new System.Drawing.Size(152, 18);
             this.label_N2Filler.TabIndex = 5;
             this.label_N2Filler.Text = "ISN (Scan Barcode):";
-            // 
-            // dataGrid_Water_ISN
-            // 
-            this.dataGrid_Water_ISN.HeaderText = "ISN";
-            this.dataGrid_Water_ISN.MinimumWidth = 8;
-            this.dataGrid_Water_ISN.Name = "dataGrid_Water_ISN";
-            this.dataGrid_Water_ISN.Width = 150;
-            // 
-            // dataGrid_Water_StartTime
-            // 
-            this.dataGrid_Water_StartTime.HeaderText = "Start Time";
-            this.dataGrid_Water_StartTime.MinimumWidth = 8;
-            this.dataGrid_Water_StartTime.Name = "dataGrid_Water_StartTime";
-            this.dataGrid_Water_StartTime.ToolTipText = "Start Time";
-            this.dataGrid_Water_StartTime.Width = 150;
-            // 
-            // dataGrid_Water_EndTime
-            // 
-            this.dataGrid_Water_EndTime.HeaderText = "End Time";
-            this.dataGrid_Water_EndTime.MinimumWidth = 8;
-            this.dataGrid_Water_EndTime.Name = "dataGrid_Water_EndTime";
-            this.dataGrid_Water_EndTime.Width = 150;
             // 
             // SDK_Log_Capturer
             // 
