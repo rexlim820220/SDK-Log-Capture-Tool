@@ -6,7 +6,7 @@ namespace SDK_Log_Capture_Tool
 {
     public partial class SDK_Log_Capturer : Form
     {
-        private AteqStatusMonitor _monitor;
+	private AteqModbusClient _ateq;
 
         public SDK_Log_Capturer()
         {
@@ -17,7 +17,7 @@ namespace SDK_Log_Capture_Tool
         {
             try
             {
-                _monitor = new AteqStatusMonitor("COM3");
+		_ateq = new AteqModbusClient("COM3");
                 txtPressureATEQ.Text = "ATEQ Ready";
             }
             catch (Exception ex)
@@ -26,36 +26,69 @@ namespace SDK_Log_Capture_Tool
             }
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void F620_UploadSFIS_Click(object sender, EventArgs e)
         {
+            try
+            {
+                string isn = txtISNATEQ.Text.Trim();
+                string startTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Trim();
+                string pressure = txtPressureATEQ.Text.Trim();
+                string leak = txtLeakATEQ.Text.Trim();
+                string status = txtStatusATEQ.Text.Trim();
 
+                if (!string.IsNullOrEmpty(isn))
+                {
+                    dgvFIFOATEQ.Rows.Add(isn, startTime, pressure, leak, status);
+                    txtISNATEQ.Clear();
+                    txtPressureATEQ.Clear();
+                    txtLeakATEQ.Clear();
+                    txtStatusATEQ.Clear();
+                    btn_upload_SFIS.Enabled = false;
+                }
+            }
+            catch (Exception)
+            {
+		lblStatus.Text = "尚未完成測試或結果無效";
+            }
         }
 
-        private void label2_Click(object sender, EventArgs e)
+        private void CheckTextBoxes(object sender, EventArgs e)
         {
-
+            bool allFilled = !string.IsNullOrEmpty(txtISNATEQ.Text) &&
+                     !string.IsNullOrEmpty(txtPressureATEQ.Text) &&
+                     !string.IsNullOrEmpty(txtLeakATEQ.Text) &&
+                     !string.IsNullOrEmpty(txtStatusATEQ.Text);
+            btn_upload_SFIS.Enabled = allFilled;
         }
 
-        private void N2_Filler_tabPage_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label6_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void dgvFIFOATEQ_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
 
+        private void is_manual_CheckedChanged(object sender, EventArgs e)
+        {
+            if (is_manual.Checked)
+            {
+                txtPressureATEQ.ReadOnly = false;
+                txtLeakATEQ.ReadOnly = false;
+                txtStatusATEQ.ReadOnly = false;
+            }
+        }
+
+        private void is_auto_CheckedChanged(object sender, EventArgs e)
+        {
+            if (is_auto.Checked)
+            {
+                txtPressureATEQ.ReadOnly = true;
+                txtLeakATEQ.ReadOnly = true;
+                txtStatusATEQ.ReadOnly = true;
+                txtPressureATEQ.Clear();
+                txtLeakATEQ.Clear();
+                txtStatusATEQ.Clear();
+            }
+        }
 
         private void loop1ISNWater_TextChanged(object sender, EventArgs e)
         {
@@ -268,7 +301,7 @@ namespace SDK_Log_Capture_Tool
             }
         }
 
-        private void btnReadLastATEQ_Click(object sender, EventArgs e)
+        private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
@@ -287,16 +320,6 @@ namespace SDK_Log_Capture_Tool
             {
                 txtPressureATEQ.Text = $"Read Failed: {ex.Message}";
             }
-        }
-
-        private void txtISNATEQ_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

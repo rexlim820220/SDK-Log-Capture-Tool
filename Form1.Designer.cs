@@ -93,6 +93,7 @@ namespace SDK_Log_Capture_Tool
             this.label_hint_N2Filler = new System.Windows.Forms.Label();
             this.textBox_N2Filler = new System.Windows.Forms.TextBox();
             this.label_N2Filler = new System.Windows.Forms.Label();
+            this.ATEQ_groupBox = new System.Windows.Forms.GroupBox();
             this.tabControl.SuspendLayout();
             this.ATEQ_F620_TabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFIFOATEQ)).BeginInit();
@@ -104,6 +105,7 @@ namespace SDK_Log_Capture_Tool
             this.group_loop1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.N2_Filler_tabPage.SuspendLayout();
+            this.ATEQ_groupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
@@ -114,29 +116,20 @@ namespace SDK_Log_Capture_Tool
             this.tabControl.Location = new System.Drawing.Point(23, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(1094, 499);
+            this.tabControl.Size = new System.Drawing.Size(1514, 499);
             this.tabControl.TabIndex = 0;
-            this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
             // ATEQ_F620_TabPage
             // 
-            this.ATEQ_F620_TabPage.Controls.Add(this.btn_upload_SFIS);
-            this.ATEQ_F620_TabPage.Controls.Add(this.is_manual);
-            this.ATEQ_F620_TabPage.Controls.Add(this.is_auto);
+            this.ATEQ_F620_TabPage.Controls.Add(this.ATEQ_groupBox);
             this.ATEQ_F620_TabPage.Controls.Add(this.dgvFIFOATEQ);
-            this.ATEQ_F620_TabPage.Controls.Add(this.txtStatusATEQ);
-            this.ATEQ_F620_TabPage.Controls.Add(this.label6);
-            this.ATEQ_F620_TabPage.Controls.Add(this.txtLeakATEQ);
-            this.ATEQ_F620_TabPage.Controls.Add(this.label2);
-            this.ATEQ_F620_TabPage.Controls.Add(this.txtPressureATEQ);
-            this.ATEQ_F620_TabPage.Controls.Add(this.Pressure);
             this.ATEQ_F620_TabPage.Controls.Add(this.lblISNStatusATEQ);
             this.ATEQ_F620_TabPage.Controls.Add(this.txtISNATEQ);
             this.ATEQ_F620_TabPage.Controls.Add(this.label_ISN_F620);
             this.ATEQ_F620_TabPage.Location = new System.Drawing.Point(4, 28);
             this.ATEQ_F620_TabPage.Name = "ATEQ_F620_TabPage";
             this.ATEQ_F620_TabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.ATEQ_F620_TabPage.Size = new System.Drawing.Size(1086, 467);
+            this.ATEQ_F620_TabPage.Size = new System.Drawing.Size(1506, 467);
             this.ATEQ_F620_TabPage.TabIndex = 0;
             this.ATEQ_F620_TabPage.Text = "ATEQ F620";
             this.ATEQ_F620_TabPage.UseVisualStyleBackColor = true;
@@ -144,37 +137,42 @@ namespace SDK_Log_Capture_Tool
             // btn_upload_SFIS
             // 
             this.btn_upload_SFIS.Enabled = false;
-            this.btn_upload_SFIS.Location = new System.Drawing.Point(700, 292);
+            this.btn_upload_SFIS.Location = new System.Drawing.Point(71, 288);
             this.btn_upload_SFIS.Name = "btn_upload_SFIS";
             this.btn_upload_SFIS.Size = new System.Drawing.Size(162, 46);
             this.btn_upload_SFIS.TabIndex = 14;
             this.btn_upload_SFIS.Text = "Upload to SFIS";
             this.btn_upload_SFIS.UseVisualStyleBackColor = true;
+            this.btn_upload_SFIS.Click += new System.EventHandler(this.F620_UploadSFIS_Click);
             // 
             // is_manual
             // 
             this.is_manual.AutoSize = true;
-            this.is_manual.Location = new System.Drawing.Point(833, 44);
+            this.is_manual.Location = new System.Drawing.Point(204, 40);
             this.is_manual.Name = "is_manual";
             this.is_manual.Size = new System.Drawing.Size(105, 22);
             this.is_manual.TabIndex = 13;
             this.is_manual.TabStop = true;
             this.is_manual.Text = "手動模式";
             this.is_manual.UseVisualStyleBackColor = true;
+            this.is_manual.CheckedChanged += new System.EventHandler(this.is_manual_CheckedChanged);
             // 
             // is_auto
             // 
             this.is_auto.AutoSize = true;
-            this.is_auto.Location = new System.Drawing.Point(707, 44);
+            this.is_auto.Checked = true;
+            this.is_auto.Location = new System.Drawing.Point(78, 40);
             this.is_auto.Name = "is_auto";
             this.is_auto.Size = new System.Drawing.Size(105, 22);
             this.is_auto.TabIndex = 12;
             this.is_auto.TabStop = true;
             this.is_auto.Text = "自動模式";
             this.is_auto.UseVisualStyleBackColor = true;
+            this.is_auto.CheckedChanged += new System.EventHandler(this.is_auto_CheckedChanged);
             // 
             // dgvFIFOATEQ
             // 
+            this.dgvFIFOATEQ.AllowUserToOrderColumns = true;
             this.dgvFIFOATEQ.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvFIFOATEQ.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ISN,
@@ -186,7 +184,7 @@ namespace SDK_Log_Capture_Tool
             this.dgvFIFOATEQ.Name = "dgvFIFOATEQ";
             this.dgvFIFOATEQ.RowHeadersWidth = 62;
             this.dgvFIFOATEQ.RowTemplate.Height = 31;
-            this.dgvFIFOATEQ.Size = new System.Drawing.Size(585, 349);
+            this.dgvFIFOATEQ.Size = new System.Drawing.Size(820, 349);
             this.dgvFIFOATEQ.TabIndex = 11;
             this.dgvFIFOATEQ.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFIFOATEQ_CellContentClick);
             // 
@@ -199,7 +197,7 @@ namespace SDK_Log_Capture_Tool
             // 
             // Program
             // 
-            this.Program.HeaderText = "Program";
+            this.Program.HeaderText = "Start Time";
             this.Program.MinimumWidth = 8;
             this.Program.Name = "Program";
             this.Program.Width = 150;
@@ -228,52 +226,53 @@ namespace SDK_Log_Capture_Tool
             // 
             // txtStatusATEQ
             // 
-            this.txtStatusATEQ.Location = new System.Drawing.Point(868, 218);
+            this.txtStatusATEQ.Location = new System.Drawing.Point(239, 214);
             this.txtStatusATEQ.Name = "txtStatusATEQ";
             this.txtStatusATEQ.ReadOnly = true;
             this.txtStatusATEQ.Size = new System.Drawing.Size(191, 29);
             this.txtStatusATEQ.TabIndex = 10;
+            this.txtStatusATEQ.TextChanged += new System.EventHandler(this.CheckTextBoxes);
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(704, 221);
+            this.label6.Location = new System.Drawing.Point(75, 217);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(90, 18);
             this.label6.TabIndex = 9;
             this.label6.Text = "Test Status:";
-            this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
             // txtLeakATEQ
             // 
-            this.txtLeakATEQ.Location = new System.Drawing.Point(868, 161);
+            this.txtLeakATEQ.Location = new System.Drawing.Point(239, 157);
             this.txtLeakATEQ.Name = "txtLeakATEQ";
             this.txtLeakATEQ.ReadOnly = true;
             this.txtLeakATEQ.Size = new System.Drawing.Size(191, 29);
             this.txtLeakATEQ.TabIndex = 8;
+            this.txtLeakATEQ.TextChanged += new System.EventHandler(this.CheckTextBoxes);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(704, 164);
+            this.label2.Location = new System.Drawing.Point(75, 160);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(158, 18);
             this.label2.TabIndex = 7;
             this.label2.Text = "Leak Rate (cm³/min):";
-            this.label2.Click += new System.EventHandler(this.label2_Click_1);
             // 
             // txtPressureATEQ
             // 
-            this.txtPressureATEQ.Location = new System.Drawing.Point(868, 109);
+            this.txtPressureATEQ.Location = new System.Drawing.Point(239, 105);
             this.txtPressureATEQ.Name = "txtPressureATEQ";
             this.txtPressureATEQ.ReadOnly = true;
             this.txtPressureATEQ.Size = new System.Drawing.Size(191, 29);
             this.txtPressureATEQ.TabIndex = 6;
+            this.txtPressureATEQ.TextChanged += new System.EventHandler(this.CheckTextBoxes);
             // 
             // Pressure
             // 
             this.Pressure.AutoSize = true;
-            this.Pressure.Location = new System.Drawing.Point(704, 112);
+            this.Pressure.Location = new System.Drawing.Point(75, 108);
             this.Pressure.Name = "Pressure";
             this.Pressure.Size = new System.Drawing.Size(106, 18);
             this.Pressure.TabIndex = 5;
@@ -287,7 +286,6 @@ namespace SDK_Log_Capture_Tool
             this.lblISNStatusATEQ.Size = new System.Drawing.Size(131, 18);
             this.lblISNStatusATEQ.TabIndex = 2;
             this.lblISNStatusATEQ.Text = "(Scan to validate)";
-            this.lblISNStatusATEQ.Click += new System.EventHandler(this.label2_Click);
             // 
             // txtISNATEQ
             // 
@@ -295,7 +293,7 @@ namespace SDK_Log_Capture_Tool
             this.txtISNATEQ.Name = "txtISNATEQ";
             this.txtISNATEQ.Size = new System.Drawing.Size(229, 29);
             this.txtISNATEQ.TabIndex = 1;
-            this.txtISNATEQ.TextChanged += new System.EventHandler(this.txtISNATEQ_TextChanged);
+            this.txtISNATEQ.TextChanged += new System.EventHandler(this.CheckTextBoxes);
             // 
             // label_ISN_F620
             // 
@@ -306,7 +304,6 @@ namespace SDK_Log_Capture_Tool
             this.label_ISN_F620.Size = new System.Drawing.Size(152, 18);
             this.label_ISN_F620.TabIndex = 0;
             this.label_ISN_F620.Text = "ISN (Scan Barcode):";
-            this.label_ISN_F620.Click += new System.EventHandler(this.label1_Click);
             // 
             // Water_Bath_tabPage
             // 
@@ -318,7 +315,7 @@ namespace SDK_Log_Capture_Tool
             this.Water_Bath_tabPage.Location = new System.Drawing.Point(4, 28);
             this.Water_Bath_tabPage.Name = "Water_Bath_tabPage";
             this.Water_Bath_tabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.Water_Bath_tabPage.Size = new System.Drawing.Size(1086, 467);
+            this.Water_Bath_tabPage.Size = new System.Drawing.Size(1506, 467);
             this.Water_Bath_tabPage.TabIndex = 1;
             this.Water_Bath_tabPage.Text = "恒溫水槽";
             this.Water_Bath_tabPage.UseVisualStyleBackColor = true;
@@ -331,11 +328,11 @@ namespace SDK_Log_Capture_Tool
             this.dataGrid_Water_ISN,
             this.dataGrid_Water_StartTime,
             this.dataGrid_Water_EndTime});
-            this.dataGrid_Water.Location = new System.Drawing.Point(798, 34);
+            this.dataGrid_Water.Location = new System.Drawing.Point(955, 34);
             this.dataGrid_Water.Name = "dataGrid_Water";
             this.dataGrid_Water.RowHeadersWidth = 62;
             this.dataGrid_Water.RowTemplate.Height = 31;
-            this.dataGrid_Water.Size = new System.Drawing.Size(248, 395);
+            this.dataGrid_Water.Size = new System.Drawing.Size(515, 395);
             this.dataGrid_Water.TabIndex = 14;
             // 
             // dataGrid_Water_ISN
@@ -710,7 +707,6 @@ namespace SDK_Log_Capture_Tool
             this.N2_Filler_tabPage.TabIndex = 2;
             this.N2_Filler_tabPage.Text = "N₂ Filler";
             this.N2_Filler_tabPage.UseVisualStyleBackColor = true;
-            this.N2_Filler_tabPage.Click += new System.EventHandler(this.N2_Filler_tabPage_Click);
             // 
             // btn_reset_N2Filler
             // 
@@ -757,11 +753,28 @@ namespace SDK_Log_Capture_Tool
             this.label_N2Filler.TabIndex = 5;
             this.label_N2Filler.Text = "ISN (Scan Barcode):";
             // 
+            // ATEQ_groupBox
+            // 
+            this.ATEQ_groupBox.Controls.Add(this.is_auto);
+            this.ATEQ_groupBox.Controls.Add(this.btn_upload_SFIS);
+            this.ATEQ_groupBox.Controls.Add(this.Pressure);
+            this.ATEQ_groupBox.Controls.Add(this.is_manual);
+            this.ATEQ_groupBox.Controls.Add(this.txtPressureATEQ);
+            this.ATEQ_groupBox.Controls.Add(this.label2);
+            this.ATEQ_groupBox.Controls.Add(this.txtLeakATEQ);
+            this.ATEQ_groupBox.Controls.Add(this.txtStatusATEQ);
+            this.ATEQ_groupBox.Controls.Add(this.label6);
+            this.ATEQ_groupBox.Location = new System.Drawing.Point(937, 40);
+            this.ATEQ_groupBox.Name = "ATEQ_groupBox";
+            this.ATEQ_groupBox.Size = new System.Drawing.Size(502, 358);
+            this.ATEQ_groupBox.TabIndex = 15;
+            this.ATEQ_groupBox.TabStop = false;
+            // 
             // SDK_Log_Capturer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1155, 564);
+            this.ClientSize = new System.Drawing.Size(1580, 564);
             this.Controls.Add(this.tabControl);
             this.Name = "SDK_Log_Capturer";
             this.Text = "SDK Log Capturer";
@@ -783,6 +796,8 @@ namespace SDK_Log_Capture_Tool
             this.groupBox2.PerformLayout();
             this.N2_Filler_tabPage.ResumeLayout(false);
             this.N2_Filler_tabPage.PerformLayout();
+            this.ATEQ_groupBox.ResumeLayout(false);
+            this.ATEQ_groupBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -811,11 +826,6 @@ namespace SDK_Log_Capture_Tool
         private System.Windows.Forms.TextBox txtLeakATEQ;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridView dgvFIFOATEQ;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ISN;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Program;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn LeakRate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Status_Column;
         private System.Windows.Forms.RadioButton is_manual;
         private System.Windows.Forms.RadioButton is_auto;
         private System.Windows.Forms.Button btn_upload_SFIS;
@@ -853,6 +863,12 @@ namespace SDK_Log_Capture_Tool
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGrid_Water_ISN;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGrid_Water_StartTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGrid_Water_EndTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ISN;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Program;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LeakRate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Status_Column;
+        private System.Windows.Forms.GroupBox ATEQ_groupBox;
     }
 }
 
