@@ -36,12 +36,12 @@ namespace SDK_Log_Capture_Tool.ATEQ
             int[] resultArea = _client.ReadHoldingRegisters(40097, 16);
 
             var parameters = new Dictionary<string, double>
-        {
-            { "Pressure", ConvertToFixedPoint((ushort)resultArea[0], (ushort)resultArea[1]) },
-            { "LeakRate", ConvertToFixedPoint((ushort)resultArea[2], (ushort)resultArea[3]) },
-            { "TestTime", ConvertToFixedPoint((ushort)resultArea[4], (ushort)resultArea[5]) }
-            // 可依據手冊擴充更多欄位
-        };
+            {
+                { "Pressure", ConvertToFixedPoint((ushort)resultArea[0], (ushort)resultArea[1]) },
+                { "LeakRate", ConvertToFixedPoint((ushort)resultArea[2], (ushort)resultArea[3]) },
+                { "TestTime", ConvertToFixedPoint((ushort)resultArea[4], (ushort)resultArea[5]) }
+                // 可依據手冊擴充更多欄位
+            };
 
             // Step 4: 讀取 Alarm Bitmask
             int[] alarmRaw = _client.ReadHoldingRegisters(40200, 1);
@@ -55,7 +55,6 @@ namespace SDK_Log_Capture_Tool.ATEQ
                 HasAlarm = hasAlarm,
                 Status = GetStatusText(resultCode, hasAlarm)
             };
-
             return true;
         }
 

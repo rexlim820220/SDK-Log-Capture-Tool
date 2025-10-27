@@ -56,36 +56,28 @@ namespace SDK_Log_Capture_Tool
             this.dataGrid_Water_EndTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.group_loop4 = new System.Windows.Forms.GroupBox();
             this.btn_loop4ResetSFISWater = new System.Windows.Forms.Button();
-            this.loop4_EndTime = new System.Windows.Forms.TextBox();
             this.btn_loop4UploadSFISWater = new System.Windows.Forms.Button();
-            this.lbl_loop4_end = new System.Windows.Forms.Label();
             this.loop4_STARTTime = new System.Windows.Forms.TextBox();
             this.label_loop4ISNWater = new System.Windows.Forms.Label();
             this.txt_loop4ISNWater = new System.Windows.Forms.TextBox();
             this.lbl_loop4_start = new System.Windows.Forms.Label();
             this.group_loop3 = new System.Windows.Forms.GroupBox();
             this.btn_loop3ResetSFISWater = new System.Windows.Forms.Button();
-            this.loop3_EndTime = new System.Windows.Forms.TextBox();
             this.btn_loop3UploadSFISWater = new System.Windows.Forms.Button();
-            this.lbl_loop3_end = new System.Windows.Forms.Label();
             this.loop3_STARTTime = new System.Windows.Forms.TextBox();
             this.label_loop3ISNWater = new System.Windows.Forms.Label();
             this.txt_loop3ISNWater = new System.Windows.Forms.TextBox();
             this.lbl_loop3_start = new System.Windows.Forms.Label();
             this.group_loop2 = new System.Windows.Forms.GroupBox();
             this.btn_loop2ResetSFISWater = new System.Windows.Forms.Button();
-            this.loop2_EndTime = new System.Windows.Forms.TextBox();
             this.btn_loop2UploadSFISWater = new System.Windows.Forms.Button();
             this.loop2_STARTTime = new System.Windows.Forms.TextBox();
-            this.lbl_loop2_end = new System.Windows.Forms.Label();
             this.label_loop2ISNWater = new System.Windows.Forms.Label();
             this.txt_loop2ISNWater = new System.Windows.Forms.TextBox();
             this.lbl_loop2_start = new System.Windows.Forms.Label();
             this.group_loop1 = new System.Windows.Forms.GroupBox();
             this.btn_loop1ResetSFISWater = new System.Windows.Forms.Button();
-            this.loop1_EndTime = new System.Windows.Forms.TextBox();
             this.loop1_STARTTime = new System.Windows.Forms.TextBox();
-            this.lbl_loop1_end = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.button2 = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
@@ -371,9 +363,7 @@ namespace SDK_Log_Capture_Tool
             // group_loop4
             // 
             this.group_loop4.Controls.Add(this.btn_loop4ResetSFISWater);
-            this.group_loop4.Controls.Add(this.loop4_EndTime);
             this.group_loop4.Controls.Add(this.btn_loop4UploadSFISWater);
-            this.group_loop4.Controls.Add(this.lbl_loop4_end);
             this.group_loop4.Controls.Add(this.loop4_STARTTime);
             this.group_loop4.Controls.Add(this.label_loop4ISNWater);
             this.group_loop4.Controls.Add(this.txt_loop4ISNWater);
@@ -393,14 +383,7 @@ namespace SDK_Log_Capture_Tool
             this.btn_loop4ResetSFISWater.TabIndex = 22;
             this.btn_loop4ResetSFISWater.Text = "Reset";
             this.btn_loop4ResetSFISWater.UseVisualStyleBackColor = true;
-            // 
-            // loop4_EndTime
-            // 
-            this.loop4_EndTime.Location = new System.Drawing.Point(469, 58);
-            this.loop4_EndTime.Name = "loop4_EndTime";
-            this.loop4_EndTime.ReadOnly = true;
-            this.loop4_EndTime.Size = new System.Drawing.Size(152, 29);
-            this.loop4_EndTime.TabIndex = 21;
+            this.btn_loop4ResetSFISWater.Click += new System.EventHandler(this.btn4ResetSFISWater_Click);
             // 
             // btn_loop4UploadSFISWater
             // 
@@ -413,18 +396,9 @@ namespace SDK_Log_Capture_Tool
             this.btn_loop4UploadSFISWater.UseVisualStyleBackColor = true;
             this.btn_loop4UploadSFISWater.Click += new System.EventHandler(this.btn4UploadSFISWater_Click);
             // 
-            // lbl_loop4_end
-            // 
-            this.lbl_loop4_end.AutoSize = true;
-            this.lbl_loop4_end.Location = new System.Drawing.Point(376, 66);
-            this.lbl_loop4_end.Name = "lbl_loop4_end";
-            this.lbl_loop4_end.Size = new System.Drawing.Size(80, 18);
-            this.lbl_loop4_end.TabIndex = 16;
-            this.lbl_loop4_end.Text = "End time: ";
-            // 
             // loop4_STARTTime
             // 
-            this.loop4_STARTTime.Location = new System.Drawing.Point(469, 21);
+            this.loop4_STARTTime.Location = new System.Drawing.Point(469, 38);
             this.loop4_STARTTime.Name = "loop4_STARTTime";
             this.loop4_STARTTime.ReadOnly = true;
             this.loop4_STARTTime.Size = new System.Drawing.Size(152, 29);
@@ -442,7 +416,7 @@ namespace SDK_Log_Capture_Tool
             // 
             // txt_loop4ISNWater
             // 
-            this.txt_loop4ISNWater.Location = new System.Drawing.Point(187, 41);
+            this.txt_loop4ISNWater.Location = new System.Drawing.Point(187, 38);
             this.txt_loop4ISNWater.Name = "txt_loop4ISNWater";
             this.txt_loop4ISNWater.Size = new System.Drawing.Size(152, 29);
             this.txt_loop4ISNWater.TabIndex = 6;
@@ -451,7 +425,7 @@ namespace SDK_Log_Capture_Tool
             // lbl_loop4_start
             // 
             this.lbl_loop4_start.AutoSize = true;
-            this.lbl_loop4_start.Location = new System.Drawing.Point(376, 32);
+            this.lbl_loop4_start.Location = new System.Drawing.Point(376, 44);
             this.lbl_loop4_start.Name = "lbl_loop4_start";
             this.lbl_loop4_start.Size = new System.Drawing.Size(87, 18);
             this.lbl_loop4_start.TabIndex = 7;
@@ -460,9 +434,7 @@ namespace SDK_Log_Capture_Tool
             // group_loop3
             // 
             this.group_loop3.Controls.Add(this.btn_loop3ResetSFISWater);
-            this.group_loop3.Controls.Add(this.loop3_EndTime);
             this.group_loop3.Controls.Add(this.btn_loop3UploadSFISWater);
-            this.group_loop3.Controls.Add(this.lbl_loop3_end);
             this.group_loop3.Controls.Add(this.loop3_STARTTime);
             this.group_loop3.Controls.Add(this.label_loop3ISNWater);
             this.group_loop3.Controls.Add(this.txt_loop3ISNWater);
@@ -482,14 +454,7 @@ namespace SDK_Log_Capture_Tool
             this.btn_loop3ResetSFISWater.TabIndex = 20;
             this.btn_loop3ResetSFISWater.Text = "Reset";
             this.btn_loop3ResetSFISWater.UseVisualStyleBackColor = true;
-            // 
-            // loop3_EndTime
-            // 
-            this.loop3_EndTime.Location = new System.Drawing.Point(469, 59);
-            this.loop3_EndTime.Name = "loop3_EndTime";
-            this.loop3_EndTime.ReadOnly = true;
-            this.loop3_EndTime.Size = new System.Drawing.Size(152, 29);
-            this.loop3_EndTime.TabIndex = 19;
+            this.btn_loop3ResetSFISWater.Click += new System.EventHandler(this.btn3ResetSFISWater_Click);
             // 
             // btn_loop3UploadSFISWater
             // 
@@ -502,18 +467,9 @@ namespace SDK_Log_Capture_Tool
             this.btn_loop3UploadSFISWater.UseVisualStyleBackColor = true;
             this.btn_loop3UploadSFISWater.Click += new System.EventHandler(this.btn3UploadSFISWater_Click);
             // 
-            // lbl_loop3_end
-            // 
-            this.lbl_loop3_end.AutoSize = true;
-            this.lbl_loop3_end.Location = new System.Drawing.Point(376, 56);
-            this.lbl_loop3_end.Name = "lbl_loop3_end";
-            this.lbl_loop3_end.Size = new System.Drawing.Size(80, 18);
-            this.lbl_loop3_end.TabIndex = 15;
-            this.lbl_loop3_end.Text = "End time: ";
-            // 
             // loop3_STARTTime
             // 
-            this.loop3_STARTTime.Location = new System.Drawing.Point(469, 22);
+            this.loop3_STARTTime.Location = new System.Drawing.Point(469, 38);
             this.loop3_STARTTime.Name = "loop3_STARTTime";
             this.loop3_STARTTime.ReadOnly = true;
             this.loop3_STARTTime.Size = new System.Drawing.Size(152, 29);
@@ -531,7 +487,7 @@ namespace SDK_Log_Capture_Tool
             // 
             // txt_loop3ISNWater
             // 
-            this.txt_loop3ISNWater.Location = new System.Drawing.Point(187, 41);
+            this.txt_loop3ISNWater.Location = new System.Drawing.Point(187, 38);
             this.txt_loop3ISNWater.Name = "txt_loop3ISNWater";
             this.txt_loop3ISNWater.Size = new System.Drawing.Size(152, 29);
             this.txt_loop3ISNWater.TabIndex = 6;
@@ -540,7 +496,7 @@ namespace SDK_Log_Capture_Tool
             // lbl_loop3_start
             // 
             this.lbl_loop3_start.AutoSize = true;
-            this.lbl_loop3_start.Location = new System.Drawing.Point(376, 25);
+            this.lbl_loop3_start.Location = new System.Drawing.Point(376, 44);
             this.lbl_loop3_start.Name = "lbl_loop3_start";
             this.lbl_loop3_start.Size = new System.Drawing.Size(87, 18);
             this.lbl_loop3_start.TabIndex = 7;
@@ -549,10 +505,8 @@ namespace SDK_Log_Capture_Tool
             // group_loop2
             // 
             this.group_loop2.Controls.Add(this.btn_loop2ResetSFISWater);
-            this.group_loop2.Controls.Add(this.loop2_EndTime);
             this.group_loop2.Controls.Add(this.btn_loop2UploadSFISWater);
             this.group_loop2.Controls.Add(this.loop2_STARTTime);
-            this.group_loop2.Controls.Add(this.lbl_loop2_end);
             this.group_loop2.Controls.Add(this.label_loop2ISNWater);
             this.group_loop2.Controls.Add(this.txt_loop2ISNWater);
             this.group_loop2.Controls.Add(this.lbl_loop2_start);
@@ -571,14 +525,7 @@ namespace SDK_Log_Capture_Tool
             this.btn_loop2ResetSFISWater.TabIndex = 18;
             this.btn_loop2ResetSFISWater.Text = "Reset";
             this.btn_loop2ResetSFISWater.UseVisualStyleBackColor = true;
-            // 
-            // loop2_EndTime
-            // 
-            this.loop2_EndTime.Location = new System.Drawing.Point(469, 56);
-            this.loop2_EndTime.Name = "loop2_EndTime";
-            this.loop2_EndTime.ReadOnly = true;
-            this.loop2_EndTime.Size = new System.Drawing.Size(152, 29);
-            this.loop2_EndTime.TabIndex = 17;
+            this.btn_loop2ResetSFISWater.Click += new System.EventHandler(this.btn2ResetSFISWater_Click);
             // 
             // btn_loop2UploadSFISWater
             // 
@@ -593,20 +540,11 @@ namespace SDK_Log_Capture_Tool
             // 
             // loop2_STARTTime
             // 
-            this.loop2_STARTTime.Location = new System.Drawing.Point(469, 19);
+            this.loop2_STARTTime.Location = new System.Drawing.Point(469, 41);
             this.loop2_STARTTime.Name = "loop2_STARTTime";
             this.loop2_STARTTime.ReadOnly = true;
             this.loop2_STARTTime.Size = new System.Drawing.Size(152, 29);
             this.loop2_STARTTime.TabIndex = 16;
-            // 
-            // lbl_loop2_end
-            // 
-            this.lbl_loop2_end.AutoSize = true;
-            this.lbl_loop2_end.Location = new System.Drawing.Point(376, 59);
-            this.lbl_loop2_end.Name = "lbl_loop2_end";
-            this.lbl_loop2_end.Size = new System.Drawing.Size(80, 18);
-            this.lbl_loop2_end.TabIndex = 14;
-            this.lbl_loop2_end.Text = "End time: ";
             // 
             // label_loop2ISNWater
             // 
@@ -620,7 +558,7 @@ namespace SDK_Log_Capture_Tool
             // 
             // txt_loop2ISNWater
             // 
-            this.txt_loop2ISNWater.Location = new System.Drawing.Point(187, 43);
+            this.txt_loop2ISNWater.Location = new System.Drawing.Point(187, 40);
             this.txt_loop2ISNWater.Name = "txt_loop2ISNWater";
             this.txt_loop2ISNWater.Size = new System.Drawing.Size(152, 29);
             this.txt_loop2ISNWater.TabIndex = 6;
@@ -629,7 +567,7 @@ namespace SDK_Log_Capture_Tool
             // lbl_loop2_start
             // 
             this.lbl_loop2_start.AutoSize = true;
-            this.lbl_loop2_start.Location = new System.Drawing.Point(376, 25);
+            this.lbl_loop2_start.Location = new System.Drawing.Point(376, 48);
             this.lbl_loop2_start.Name = "lbl_loop2_start";
             this.lbl_loop2_start.Size = new System.Drawing.Size(87, 18);
             this.lbl_loop2_start.TabIndex = 7;
@@ -638,9 +576,7 @@ namespace SDK_Log_Capture_Tool
             // group_loop1
             // 
             this.group_loop1.Controls.Add(this.btn_loop1ResetSFISWater);
-            this.group_loop1.Controls.Add(this.loop1_EndTime);
             this.group_loop1.Controls.Add(this.loop1_STARTTime);
-            this.group_loop1.Controls.Add(this.lbl_loop1_end);
             this.group_loop1.Controls.Add(this.groupBox2);
             this.group_loop1.Controls.Add(this.btn_loop1UploadSFISWater);
             this.group_loop1.Controls.Add(this.label_loop1ISNWater);
@@ -662,32 +598,15 @@ namespace SDK_Log_Capture_Tool
             this.btn_loop1ResetSFISWater.TabIndex = 16;
             this.btn_loop1ResetSFISWater.Text = "Reset";
             this.btn_loop1ResetSFISWater.UseVisualStyleBackColor = true;
-            // 
-            // loop1_EndTime
-            // 
-            this.loop1_EndTime.AcceptsReturn = true;
-            this.loop1_EndTime.Location = new System.Drawing.Point(469, 59);
-            this.loop1_EndTime.Name = "loop1_EndTime";
-            this.loop1_EndTime.ReadOnly = true;
-            this.loop1_EndTime.Size = new System.Drawing.Size(152, 29);
-            this.loop1_EndTime.TabIndex = 15;
+            this.btn_loop1ResetSFISWater.Click += new System.EventHandler(this.btn1ResetSFISWater_Click);
             // 
             // loop1_STARTTime
             // 
-            this.loop1_STARTTime.Location = new System.Drawing.Point(469, 22);
+            this.loop1_STARTTime.Location = new System.Drawing.Point(469, 38);
             this.loop1_STARTTime.Name = "loop1_STARTTime";
             this.loop1_STARTTime.ReadOnly = true;
             this.loop1_STARTTime.Size = new System.Drawing.Size(152, 29);
             this.loop1_STARTTime.TabIndex = 14;
-            // 
-            // lbl_loop1_end
-            // 
-            this.lbl_loop1_end.AutoSize = true;
-            this.lbl_loop1_end.Location = new System.Drawing.Point(376, 57);
-            this.lbl_loop1_end.Name = "lbl_loop1_end";
-            this.lbl_loop1_end.Size = new System.Drawing.Size(80, 18);
-            this.lbl_loop1_end.TabIndex = 13;
-            this.lbl_loop1_end.Text = "End time: ";
             // 
             // groupBox2
             // 
@@ -752,7 +671,7 @@ namespace SDK_Log_Capture_Tool
             // label_loop1ISNWater
             // 
             this.label_loop1ISNWater.AutoSize = true;
-            this.label_loop1ISNWater.Location = new System.Drawing.Point(18, 40);
+            this.label_loop1ISNWater.Location = new System.Drawing.Point(18, 44);
             this.label_loop1ISNWater.MinimumSize = new System.Drawing.Size(2, 3);
             this.label_loop1ISNWater.Name = "label_loop1ISNWater";
             this.label_loop1ISNWater.Size = new System.Drawing.Size(152, 18);
@@ -761,7 +680,7 @@ namespace SDK_Log_Capture_Tool
             // 
             // txt_loop1ISNWater
             // 
-            this.txt_loop1ISNWater.Location = new System.Drawing.Point(187, 37);
+            this.txt_loop1ISNWater.Location = new System.Drawing.Point(187, 39);
             this.txt_loop1ISNWater.Name = "txt_loop1ISNWater";
             this.txt_loop1ISNWater.Size = new System.Drawing.Size(152, 29);
             this.txt_loop1ISNWater.TabIndex = 6;
@@ -770,7 +689,7 @@ namespace SDK_Log_Capture_Tool
             // lbl_loop1_start
             // 
             this.lbl_loop1_start.AutoSize = true;
-            this.lbl_loop1_start.Location = new System.Drawing.Point(376, 25);
+            this.lbl_loop1_start.Location = new System.Drawing.Point(376, 43);
             this.lbl_loop1_start.Name = "lbl_loop1_start";
             this.lbl_loop1_start.Size = new System.Drawing.Size(87, 18);
             this.lbl_loop1_start.TabIndex = 7;
@@ -920,17 +839,9 @@ namespace SDK_Log_Capture_Tool
         private System.Windows.Forms.Label lbl_loop4_start;
         private System.Windows.Forms.DataGridView dataGrid_Water;
         private System.Windows.Forms.Button btn_loop1UploadSFISWater;
-        private System.Windows.Forms.Label lbl_loop4_end;
-        private System.Windows.Forms.Label lbl_loop3_end;
-        private System.Windows.Forms.Label lbl_loop2_end;
-        private System.Windows.Forms.Label lbl_loop1_end;
-        private System.Windows.Forms.TextBox loop4_EndTime;
         private System.Windows.Forms.TextBox loop4_STARTTime;
-        private System.Windows.Forms.TextBox loop3_EndTime;
         private System.Windows.Forms.TextBox loop3_STARTTime;
-        private System.Windows.Forms.TextBox loop2_EndTime;
         private System.Windows.Forms.TextBox loop2_STARTTime;
-        private System.Windows.Forms.TextBox loop1_EndTime;
         private System.Windows.Forms.TextBox loop1_STARTTime;
         private System.Windows.Forms.Button btn_loop4ResetSFISWater;
         private System.Windows.Forms.Button btn_loop4UploadSFISWater;

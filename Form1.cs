@@ -6,7 +6,6 @@ namespace SDK_Log_Capture_Tool
 {
     public partial class SDK_Log_Capturer : Form
     {
-        private IAteqReader _ateqReader;
         private AteqStatusMonitor _monitor;
 
         public SDK_Log_Capturer()
@@ -111,45 +110,84 @@ namespace SDK_Log_Capture_Tool
 
         private void btn1UploadSFISWater_Click(object sender, EventArgs e)
         {
-            loop1_EndTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             try
             {
                 string isn = txt_loop1ISNWater.Text.Trim();
                 string startTime = loop1_STARTTime.Text.Trim();
-                string endTime = loop1_EndTime.Text.Trim();
+                string endTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Trim();
 
                 if (!string.IsNullOrEmpty(isn))
                 {
                     dataGrid_Water.Rows.Add(isn, startTime, endTime);
+                    txt_loop1ISNWater.Clear();
+                    loop1_STARTTime.Clear();
+                    btn_loop1UploadSFISWater.Enabled = false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
+            {
+            }
+        }
+
+        private void btn1ResetSFISWater_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // 停止上傳SFIS動作
+                string isn = txt_loop1ISNWater.Text.Trim();
+                if (!string.IsNullOrEmpty(isn))
+                {
+                    txt_loop1ISNWater.Clear();
+                    loop1_STARTTime.Clear();
+                    btn_loop1UploadSFISWater.Enabled = false;
+                }
+            }
+            catch (Exception)
             {
             }
         }
 
         private void btn2UploadSFISWater_Click(object sender, EventArgs e)
         {
-            loop2_EndTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             try
             {
                 string isn = txt_loop2ISNWater.Text.Trim();
                 string startTime = loop2_STARTTime.Text.Trim();
-                string endTime = loop2_EndTime.Text.Trim();
+                string endTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Trim();
 
                 if (!string.IsNullOrEmpty(isn))
                 {
                     dataGrid_Water.Rows.Add(isn, startTime, endTime);
+                    txt_loop2ISNWater.Clear();
+                    loop2_STARTTime.Clear();
+                    btn_loop2UploadSFISWater.Enabled = false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
+            {
+            }
+        }
+
+        private void btn2ResetSFISWater_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // 停止上傳SFIS動作
+                string isn = txt_loop2ISNWater.Text.Trim();
+                if (!string.IsNullOrEmpty(isn))
+                {
+                    txt_loop2ISNWater.Clear();
+                    loop2_STARTTime.Clear();
+                    btn_loop2UploadSFISWater.Enabled = false;
+                }
+            }
+            catch (Exception)
             {
             }
         }
 
         private void btn3UploadSFISWater_Click(object sender, EventArgs e)
         {
-            loop3_EndTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             try
             {
                 //bool isRunning = _ateqReader.IsTestRunning();
@@ -157,34 +195,75 @@ namespace SDK_Log_Capture_Tool
 
                 string isn = txt_loop3ISNWater.Text.Trim();
                 string startTime = loop3_STARTTime.Text.Trim();
-                string endTime = loop3_EndTime.Text.Trim();
+                string endTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Trim();
 
                 if (!string.IsNullOrEmpty(isn))
                 {
                     dataGrid_Water.Rows.Add(isn, startTime, endTime);
+                    txt_loop3ISNWater.Clear();
+                    loop3_STARTTime.Clear();
+                    btn_loop3UploadSFISWater.Enabled = false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //lblATEQStatus.Text = $"讀取狀態失敗: {ex.Message}";
             }
         }
 
+        private void btn3ResetSFISWater_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // 停止上傳SFIS動作
+                string isn = txt_loop3ISNWater.Text.Trim();
+                if (!string.IsNullOrEmpty(isn))
+                {
+                    txt_loop3ISNWater.Clear();
+                    loop3_STARTTime.Clear();
+                    btn_loop3UploadSFISWater.Enabled = false;
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
         private void btn4UploadSFISWater_Click(object sender, EventArgs e)
         {
-            loop4_EndTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             try
             {
                 string isn = txt_loop4ISNWater.Text.Trim();
                 string startTime = loop4_STARTTime.Text.Trim();
-                string endTime = loop4_EndTime.Text.Trim();
+                string endTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Trim();
 
                 if (!string.IsNullOrEmpty(isn))
                 {
                     dataGrid_Water.Rows.Add(isn, startTime, endTime);
+                    txt_loop4ISNWater.Clear();
+                    loop4_STARTTime.Clear();
+                    btn_loop4UploadSFISWater.Enabled = false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
+            {
+            }
+        }
+
+        private void btn4ResetSFISWater_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // 停止上傳SFIS動作
+                string isn = txt_loop4ISNWater.Text.Trim();
+                if (!string.IsNullOrEmpty(isn))
+                {
+                    txt_loop4ISNWater.Clear();
+                    loop4_STARTTime.Clear();
+                    btn_loop4UploadSFISWater.Enabled = false;
+                }
+            }
+            catch (Exception)
             {
             }
         }
