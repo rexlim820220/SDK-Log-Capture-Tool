@@ -1,6 +1,4 @@
 using System;
-using EasyModbus;
-using System.Collections.Generic;
 
 namespace SDK_Log_Capture_Tool.ATEQ
 {

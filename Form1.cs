@@ -55,7 +55,7 @@ namespace SDK_Log_Capture_Tool
             btn_upload_SFIS.Enabled = allFilled;
             try
             {
-                if (_monitor.TryGetResult(out var result) && !string.IsNullOrEmpty(txtISNATEQ.Text))
+                if (is_auto.Checked && _monitor.TryGetResult(out var result) && !string.IsNullOrEmpty(txtISNATEQ.Text))
                 {
 #if DEBUG
                     Random rand = new Random();
