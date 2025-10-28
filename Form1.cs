@@ -1,29 +1,24 @@
 using System;
 using System.Windows.Forms;
 using SDK_Log_Capture_Tool.ATEQ;
+using System.Collections.Generic;
 
 namespace SDK_Log_Capture_Tool
 {
     public partial class SDK_Log_Capturer : Form
     {
-	private AteqModbusClient _ateq;
+        private AteqStatusMonitor _monitor;
 
         public SDK_Log_Capturer()
         {
             InitializeComponent();
-        }
 
-        private void SDK_Log_Capturer_Load(object sender, EventArgs e)
-        {
-            try
-            {
-		_ateq = new AteqModbusClient("COM3");
-                txtPressureATEQ.Text = "ATEQ Ready";
-            }
-            catch (Exception ex)
-            {
-                txtPressureATEQ.Text = $"ATEQ Init Failed: {ex.Message}";
-            }
+#if DEBUG
+            IAteqModbusTransport transport = new MockModbusTransport();
+#else
+            IAteqModbusTransport transport = new ModbusTransport("COM3");
+#endif
+            _monitor = new AteqStatusMonitor(transport);
         }
 
         private void F620_UploadSFIS_Click(object sender, EventArgs e)
@@ -48,7 +43,6 @@ namespace SDK_Log_Capture_Tool
             }
             catch (Exception)
             {
-		lblStatus.Text = "尚未完成測試或結果無效";
             }
         }
 
@@ -59,12 +53,32 @@ namespace SDK_Log_Capture_Tool
                      !string.IsNullOrEmpty(txtLeakATEQ.Text) &&
                      !string.IsNullOrEmpty(txtStatusATEQ.Text);
             btn_upload_SFIS.Enabled = allFilled;
-        }
-
-
-        private void dgvFIFOATEQ_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
+            try
+            {
+                if (_monitor.TryGetResult(out var result) && !string.IsNullOrEmpty(txtISNATEQ.Text))
+                {
+#if DEBUG
+                    Random rand = new Random();
+                    result.Parameters = new Dictionary<string, double> {
+                        { "Pressure", rand.NextDouble() * 5.0 },
+                        { "LeakRate", rand.NextDouble() * 0.1 },
+                        { "TestTime", rand.NextDouble() * 30.0 }
+                    };
+#endif
+                    txtPressureATEQ.Text = result.Parameters["Pressure"].ToString("F3");
+                    txtLeakATEQ.Text = result.Parameters["LeakRate"].ToString("F3");
+                    txtStatusATEQ.Text = result.Status;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Read Failed: {ex.Message}", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtISNATEQ.Clear();
+                txtPressureATEQ.Clear();
+                txtLeakATEQ.Clear();
+                txtStatusATEQ.Clear();
+                return;
+            }
         }
 
         private void is_manual_CheckedChanged(object sender, EventArgs e)
@@ -126,21 +140,6 @@ namespace SDK_Log_Capture_Tool
             }
         }
 
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Water_Bath_tabPage_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lblISNStatusWater_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void btn1UploadSFISWater_Click(object sender, EventArgs e)
         {
             try
@@ -166,7 +165,7 @@ namespace SDK_Log_Capture_Tool
         {
             try
             {
-                // 停止上傳SFIS動作
+                //停止上傳SFIS動作
                 string isn = txt_loop1ISNWater.Text.Trim();
                 if (!string.IsNullOrEmpty(isn))
                 {
@@ -205,7 +204,7 @@ namespace SDK_Log_Capture_Tool
         {
             try
             {
-                // 停止上傳SFIS動作
+                //停止上傳SFIS動作
                 string isn = txt_loop2ISNWater.Text.Trim();
                 if (!string.IsNullOrEmpty(isn))
                 {
@@ -248,7 +247,7 @@ namespace SDK_Log_Capture_Tool
         {
             try
             {
-                // 停止上傳SFIS動作
+                //停止上傳SFIS動作
                 string isn = txt_loop3ISNWater.Text.Trim();
                 if (!string.IsNullOrEmpty(isn))
                 {
@@ -287,7 +286,7 @@ namespace SDK_Log_Capture_Tool
         {
             try
             {
-                // 停止上傳SFIS動作
+                //停止上傳SFIS動作
                 string isn = txt_loop4ISNWater.Text.Trim();
                 if (!string.IsNullOrEmpty(isn))
                 {
@@ -298,27 +297,6 @@ namespace SDK_Log_Capture_Tool
             }
             catch (Exception)
             {
-            }
-        }
-
-        private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (_monitor.TryGetResult(out var result))
-                {
-                    txtPressureATEQ.Text = result.Parameters["Pressure"].ToString("F3");
-                    txtLeakATEQ.Text = result.Parameters["LeakRate"].ToString("F3");
-                    txtStatusATEQ.Text = result.Status;
-                }
-                else
-                {
-                    txtStatusATEQ.Text = "測試尚未完成或結果無效";
-                }
-            }
-            catch (Exception ex)
-            {
-                txtPressureATEQ.Text = $"Read Failed: {ex.Message}";
             }
         }
     }
