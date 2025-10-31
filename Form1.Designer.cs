@@ -52,6 +52,10 @@ namespace SDK_Log_Capture_Tool
             this.label_ISN_F620 = new System.Windows.Forms.Label();
             this.Water_Bath_tabPage = new System.Windows.Forms.TabPage();
             this.dataGrid_Water = new System.Windows.Forms.DataGridView();
+            this.dataGrid_Water_ISN = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Loop = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGrid_Water_StartTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGrid_Water_EndTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.group_loop4 = new System.Windows.Forms.GroupBox();
             this.btn_loop4ResetSFISWater = new System.Windows.Forms.Button();
             this.btn_loop4UploadSFISWater = new System.Windows.Forms.Button();
@@ -81,26 +85,17 @@ namespace SDK_Log_Capture_Tool
             this.txt_loop1ISNWater = new System.Windows.Forms.TextBox();
             this.lbl_loop1_start = new System.Windows.Forms.Label();
             this.N2_Filler_tabPage = new System.Windows.Forms.TabPage();
-            this.btn_reset_N2Filler = new System.Windows.Forms.Button();
-            this.btn_start_N2Filler = new System.Windows.Forms.Button();
-            this.label_hint_N2Filler = new System.Windows.Forms.Label();
-            this.textBox_N2Filler = new System.Windows.Forms.TextBox();
-            this.label_N2Filler = new System.Windows.Forms.Label();
-            this.N2filler_GridView = new System.Windows.Forms.DataGridView();
             this.N2filler_groupBox = new System.Windows.Forms.GroupBox();
             this.btnN2_auto_radio = new System.Windows.Forms.RadioButton();
             this.btn_N2_upload = new System.Windows.Forms.Button();
             this.lbl_N2_pressure = new System.Windows.Forms.Label();
             this.btnN2_manual_radio = new System.Windows.Forms.RadioButton();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.N2_textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.N2_textBox2 = new System.Windows.Forms.TextBox();
+            this.N2_textBox3 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.dataGrid_Water_ISN = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Loop = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGrid_Water_StartTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGrid_Water_EndTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.N2filler_GridView = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.介質 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -109,6 +104,11 @@ namespace SDK_Log_Capture_Tool
             this.系統真空 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.壓差 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.進口壓力 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btn_reset_N2Filler = new System.Windows.Forms.Button();
+            this.btn_start_N2Filler = new System.Windows.Forms.Button();
+            this.label_hint_N2Filler = new System.Windows.Forms.Label();
+            this.ISN_N2Filler = new System.Windows.Forms.TextBox();
+            this.label_N2Filler = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.ATEQ_F620_TabPage.SuspendLayout();
             this.ATEQ_groupBox.SuspendLayout();
@@ -120,8 +120,8 @@ namespace SDK_Log_Capture_Tool
             this.group_loop2.SuspendLayout();
             this.group_loop1.SuspendLayout();
             this.N2_Filler_tabPage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.N2filler_GridView)).BeginInit();
             this.N2filler_groupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.N2filler_GridView)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl
@@ -366,6 +366,35 @@ namespace SDK_Log_Capture_Tool
             this.dataGrid_Water.RowTemplate.Height = 31;
             this.dataGrid_Water.Size = new System.Drawing.Size(664, 395);
             this.dataGrid_Water.TabIndex = 14;
+            // 
+            // dataGrid_Water_ISN
+            // 
+            this.dataGrid_Water_ISN.HeaderText = "ISN";
+            this.dataGrid_Water_ISN.MinimumWidth = 8;
+            this.dataGrid_Water_ISN.Name = "dataGrid_Water_ISN";
+            this.dataGrid_Water_ISN.Width = 150;
+            // 
+            // Loop
+            // 
+            this.Loop.HeaderText = "Loop No.";
+            this.Loop.MinimumWidth = 8;
+            this.Loop.Name = "Loop";
+            this.Loop.Width = 150;
+            // 
+            // dataGrid_Water_StartTime
+            // 
+            this.dataGrid_Water_StartTime.HeaderText = "Start Time";
+            this.dataGrid_Water_StartTime.MinimumWidth = 8;
+            this.dataGrid_Water_StartTime.Name = "dataGrid_Water_StartTime";
+            this.dataGrid_Water_StartTime.ToolTipText = "Start Time";
+            this.dataGrid_Water_StartTime.Width = 150;
+            // 
+            // dataGrid_Water_EndTime
+            // 
+            this.dataGrid_Water_EndTime.HeaderText = "End Time";
+            this.dataGrid_Water_EndTime.MinimumWidth = 8;
+            this.dataGrid_Water_EndTime.Name = "dataGrid_Water_EndTime";
+            this.dataGrid_Water_EndTime.Width = 150;
             // 
             // group_loop4
             // 
@@ -658,7 +687,7 @@ namespace SDK_Log_Capture_Tool
             this.N2_Filler_tabPage.Controls.Add(this.btn_reset_N2Filler);
             this.N2_Filler_tabPage.Controls.Add(this.btn_start_N2Filler);
             this.N2_Filler_tabPage.Controls.Add(this.label_hint_N2Filler);
-            this.N2_Filler_tabPage.Controls.Add(this.textBox_N2Filler);
+            this.N2_Filler_tabPage.Controls.Add(this.ISN_N2Filler);
             this.N2_Filler_tabPage.Controls.Add(this.label_N2Filler);
             this.N2_Filler_tabPage.Location = new System.Drawing.Point(4, 28);
             this.N2_Filler_tabPage.Name = "N2_Filler_tabPage";
@@ -668,81 +697,16 @@ namespace SDK_Log_Capture_Tool
             this.N2_Filler_tabPage.Text = "N₂ Filler";
             this.N2_Filler_tabPage.UseVisualStyleBackColor = true;
             // 
-            // btn_reset_N2Filler
-            // 
-            this.btn_reset_N2Filler.Location = new System.Drawing.Point(858, 27);
-            this.btn_reset_N2Filler.Name = "btn_reset_N2Filler";
-            this.btn_reset_N2Filler.Size = new System.Drawing.Size(159, 46);
-            this.btn_reset_N2Filler.TabIndex = 9;
-            this.btn_reset_N2Filler.Text = "Reset";
-            this.btn_reset_N2Filler.UseVisualStyleBackColor = true;
-            // 
-            // btn_start_N2Filler
-            // 
-            this.btn_start_N2Filler.Enabled = false;
-            this.btn_start_N2Filler.Location = new System.Drawing.Point(670, 27);
-            this.btn_start_N2Filler.Name = "btn_start_N2Filler";
-            this.btn_start_N2Filler.Size = new System.Drawing.Size(173, 46);
-            this.btn_start_N2Filler.TabIndex = 8;
-            this.btn_start_N2Filler.Text = "Start Test";
-            this.btn_start_N2Filler.UseVisualStyleBackColor = true;
-            // 
-            // label_hint_N2Filler
-            // 
-            this.label_hint_N2Filler.AutoSize = true;
-            this.label_hint_N2Filler.Location = new System.Drawing.Point(494, 41);
-            this.label_hint_N2Filler.Name = "label_hint_N2Filler";
-            this.label_hint_N2Filler.Size = new System.Drawing.Size(131, 18);
-            this.label_hint_N2Filler.TabIndex = 7;
-            this.label_hint_N2Filler.Text = "(Scan to validate)";
-            // 
-            // textBox_N2Filler
-            // 
-            this.textBox_N2Filler.Location = new System.Drawing.Point(238, 38);
-            this.textBox_N2Filler.Name = "textBox_N2Filler";
-            this.textBox_N2Filler.Size = new System.Drawing.Size(229, 29);
-            this.textBox_N2Filler.TabIndex = 6;
-            // 
-            // label_N2Filler
-            // 
-            this.label_N2Filler.AutoSize = true;
-            this.label_N2Filler.Location = new System.Drawing.Point(69, 41);
-            this.label_N2Filler.MinimumSize = new System.Drawing.Size(2, 3);
-            this.label_N2Filler.Name = "label_N2Filler";
-            this.label_N2Filler.Size = new System.Drawing.Size(152, 18);
-            this.label_N2Filler.TabIndex = 5;
-            this.label_N2Filler.Text = "ISN (Scan Barcode):";
-            // 
-            // N2filler_GridView
-            // 
-            this.N2filler_GridView.AllowUserToOrderColumns = true;
-            this.N2filler_GridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.N2filler_GridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn1,
-            this.dataGridViewTextBoxColumn2,
-            this.介質,
-            this.設定壓力,
-            this.產品壓力,
-            this.系統真空,
-            this.壓差,
-            this.進口壓力});
-            this.N2filler_GridView.Location = new System.Drawing.Point(72, 89);
-            this.N2filler_GridView.Name = "N2filler_GridView";
-            this.N2filler_GridView.RowHeadersWidth = 62;
-            this.N2filler_GridView.RowTemplate.Height = 31;
-            this.N2filler_GridView.Size = new System.Drawing.Size(820, 349);
-            this.N2filler_GridView.TabIndex = 12;
-            // 
             // N2filler_groupBox
             // 
             this.N2filler_groupBox.Controls.Add(this.btnN2_auto_radio);
             this.N2filler_groupBox.Controls.Add(this.btn_N2_upload);
             this.N2filler_groupBox.Controls.Add(this.lbl_N2_pressure);
             this.N2filler_groupBox.Controls.Add(this.btnN2_manual_radio);
-            this.N2filler_groupBox.Controls.Add(this.textBox1);
+            this.N2filler_groupBox.Controls.Add(this.N2_textBox1);
             this.N2filler_groupBox.Controls.Add(this.label2);
-            this.N2filler_groupBox.Controls.Add(this.textBox2);
-            this.N2filler_groupBox.Controls.Add(this.textBox3);
+            this.N2filler_groupBox.Controls.Add(this.N2_textBox2);
+            this.N2filler_groupBox.Controls.Add(this.N2_textBox3);
             this.N2filler_groupBox.Controls.Add(this.label3);
             this.N2filler_groupBox.Location = new System.Drawing.Point(944, 89);
             this.N2filler_groupBox.Name = "N2filler_groupBox";
@@ -771,6 +735,7 @@ namespace SDK_Log_Capture_Tool
             this.btn_N2_upload.TabIndex = 14;
             this.btn_N2_upload.Text = "Upload to SFIS";
             this.btn_N2_upload.UseVisualStyleBackColor = true;
+            this.btn_N2_upload.Click += new System.EventHandler(this.N2_UploadSFIS_Click);
             // 
             // lbl_N2_pressure
             // 
@@ -791,14 +756,16 @@ namespace SDK_Log_Capture_Tool
             this.btnN2_manual_radio.TabStop = true;
             this.btnN2_manual_radio.Text = "Manual mode";
             this.btnN2_manual_radio.UseVisualStyleBackColor = true;
+            this.btnN2_manual_radio.CheckedChanged += new System.EventHandler(this.N2_manual_CheckedChanged);
             // 
-            // textBox1
+            // N2_textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(239, 105);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(191, 29);
-            this.textBox1.TabIndex = 6;
+            this.N2_textBox1.Location = new System.Drawing.Point(239, 105);
+            this.N2_textBox1.Name = "N2_textBox1";
+            this.N2_textBox1.ReadOnly = true;
+            this.N2_textBox1.Size = new System.Drawing.Size(191, 29);
+            this.N2_textBox1.TabIndex = 6;
+            this.N2_textBox1.TextChanged += new System.EventHandler(this.Allow_N2_Upload);
             // 
             // label2
             // 
@@ -809,21 +776,23 @@ namespace SDK_Log_Capture_Tool
             this.label2.TabIndex = 7;
             this.label2.Text = "設定壓力:";
             // 
-            // textBox2
+            // N2_textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(239, 157);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(191, 29);
-            this.textBox2.TabIndex = 8;
+            this.N2_textBox2.Location = new System.Drawing.Point(239, 157);
+            this.N2_textBox2.Name = "N2_textBox2";
+            this.N2_textBox2.ReadOnly = true;
+            this.N2_textBox2.Size = new System.Drawing.Size(191, 29);
+            this.N2_textBox2.TabIndex = 8;
+            this.N2_textBox2.TextChanged += new System.EventHandler(this.Allow_N2_Upload);
             // 
-            // textBox3
+            // N2_textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(239, 214);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.ReadOnly = true;
-            this.textBox3.Size = new System.Drawing.Size(191, 29);
-            this.textBox3.TabIndex = 10;
+            this.N2_textBox3.Location = new System.Drawing.Point(239, 214);
+            this.N2_textBox3.Name = "N2_textBox3";
+            this.N2_textBox3.ReadOnly = true;
+            this.N2_textBox3.Size = new System.Drawing.Size(191, 29);
+            this.N2_textBox3.TabIndex = 10;
+            this.N2_textBox3.TextChanged += new System.EventHandler(this.Allow_N2_Upload);
             // 
             // label3
             // 
@@ -834,34 +803,25 @@ namespace SDK_Log_Capture_Tool
             this.label3.TabIndex = 9;
             this.label3.Text = "產品壓力:";
             // 
-            // dataGrid_Water_ISN
+            // N2filler_GridView
             // 
-            this.dataGrid_Water_ISN.HeaderText = "ISN";
-            this.dataGrid_Water_ISN.MinimumWidth = 8;
-            this.dataGrid_Water_ISN.Name = "dataGrid_Water_ISN";
-            this.dataGrid_Water_ISN.Width = 150;
-            // 
-            // Loop
-            // 
-            this.Loop.HeaderText = "Loop No.";
-            this.Loop.MinimumWidth = 8;
-            this.Loop.Name = "Loop";
-            this.Loop.Width = 150;
-            // 
-            // dataGrid_Water_StartTime
-            // 
-            this.dataGrid_Water_StartTime.HeaderText = "Start Time";
-            this.dataGrid_Water_StartTime.MinimumWidth = 8;
-            this.dataGrid_Water_StartTime.Name = "dataGrid_Water_StartTime";
-            this.dataGrid_Water_StartTime.ToolTipText = "Start Time";
-            this.dataGrid_Water_StartTime.Width = 150;
-            // 
-            // dataGrid_Water_EndTime
-            // 
-            this.dataGrid_Water_EndTime.HeaderText = "End Time";
-            this.dataGrid_Water_EndTime.MinimumWidth = 8;
-            this.dataGrid_Water_EndTime.Name = "dataGrid_Water_EndTime";
-            this.dataGrid_Water_EndTime.Width = 150;
+            this.N2filler_GridView.AllowUserToOrderColumns = true;
+            this.N2filler_GridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.N2filler_GridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1,
+            this.dataGridViewTextBoxColumn2,
+            this.介質,
+            this.設定壓力,
+            this.產品壓力,
+            this.系統真空,
+            this.壓差,
+            this.進口壓力});
+            this.N2filler_GridView.Location = new System.Drawing.Point(72, 89);
+            this.N2filler_GridView.Name = "N2filler_GridView";
+            this.N2filler_GridView.RowHeadersWidth = 62;
+            this.N2filler_GridView.RowTemplate.Height = 31;
+            this.N2filler_GridView.Size = new System.Drawing.Size(820, 349);
+            this.N2filler_GridView.TabIndex = 12;
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -919,6 +879,53 @@ namespace SDK_Log_Capture_Tool
             this.進口壓力.Name = "進口壓力";
             this.進口壓力.Width = 150;
             // 
+            // btn_reset_N2Filler
+            // 
+            this.btn_reset_N2Filler.Location = new System.Drawing.Point(858, 27);
+            this.btn_reset_N2Filler.Name = "btn_reset_N2Filler";
+            this.btn_reset_N2Filler.Size = new System.Drawing.Size(159, 46);
+            this.btn_reset_N2Filler.TabIndex = 9;
+            this.btn_reset_N2Filler.Text = "Reset";
+            this.btn_reset_N2Filler.UseVisualStyleBackColor = true;
+            this.btn_reset_N2Filler.Click += new System.EventHandler(this.Reset_N2_Start);
+            // 
+            // btn_start_N2Filler
+            // 
+            this.btn_start_N2Filler.Enabled = false;
+            this.btn_start_N2Filler.Location = new System.Drawing.Point(670, 27);
+            this.btn_start_N2Filler.Name = "btn_start_N2Filler";
+            this.btn_start_N2Filler.Size = new System.Drawing.Size(173, 46);
+            this.btn_start_N2Filler.TabIndex = 8;
+            this.btn_start_N2Filler.Text = "Start Test";
+            this.btn_start_N2Filler.UseVisualStyleBackColor = true;
+            // 
+            // label_hint_N2Filler
+            // 
+            this.label_hint_N2Filler.AutoSize = true;
+            this.label_hint_N2Filler.Location = new System.Drawing.Point(494, 41);
+            this.label_hint_N2Filler.Name = "label_hint_N2Filler";
+            this.label_hint_N2Filler.Size = new System.Drawing.Size(131, 18);
+            this.label_hint_N2Filler.TabIndex = 7;
+            this.label_hint_N2Filler.Text = "(Scan to validate)";
+            // 
+            // ISN_N2Filler
+            // 
+            this.ISN_N2Filler.Location = new System.Drawing.Point(238, 38);
+            this.ISN_N2Filler.Name = "ISN_N2Filler";
+            this.ISN_N2Filler.Size = new System.Drawing.Size(229, 29);
+            this.ISN_N2Filler.TabIndex = 6;
+            this.ISN_N2Filler.TextChanged += new System.EventHandler(this.Allow_N2_Start);
+            // 
+            // label_N2Filler
+            // 
+            this.label_N2Filler.AutoSize = true;
+            this.label_N2Filler.Location = new System.Drawing.Point(69, 41);
+            this.label_N2Filler.MinimumSize = new System.Drawing.Size(2, 3);
+            this.label_N2Filler.Name = "label_N2Filler";
+            this.label_N2Filler.Size = new System.Drawing.Size(152, 18);
+            this.label_N2Filler.TabIndex = 5;
+            this.label_N2Filler.Text = "ISN (Scan Barcode):";
+            // 
             // SDK_Log_Capturer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -945,9 +952,9 @@ namespace SDK_Log_Capture_Tool
             this.group_loop1.PerformLayout();
             this.N2_Filler_tabPage.ResumeLayout(false);
             this.N2_Filler_tabPage.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.N2filler_GridView)).EndInit();
             this.N2filler_groupBox.ResumeLayout(false);
             this.N2filler_groupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.N2filler_GridView)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -967,7 +974,7 @@ namespace SDK_Log_Capture_Tool
         private System.Windows.Forms.Button btn_reset_N2Filler;
         private System.Windows.Forms.Button btn_start_N2Filler;
         private System.Windows.Forms.Label label_hint_N2Filler;
-        private System.Windows.Forms.TextBox textBox_N2Filler;
+        private System.Windows.Forms.TextBox ISN_N2Filler;
         private System.Windows.Forms.Label label_N2Filler;
         private System.Windows.Forms.TextBox txtPressureATEQ;
         private System.Windows.Forms.Label ATEQ_lblPressure;
@@ -1016,10 +1023,10 @@ namespace SDK_Log_Capture_Tool
         private System.Windows.Forms.Button btn_N2_upload;
         private System.Windows.Forms.Label lbl_N2_pressure;
         private System.Windows.Forms.RadioButton btnN2_manual_radio;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox N2_textBox1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox N2_textBox2;
+        private System.Windows.Forms.TextBox N2_textBox3;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.DataGridView N2filler_GridView;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGrid_Water_ISN;

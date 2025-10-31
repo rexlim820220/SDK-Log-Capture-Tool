@@ -69,6 +69,12 @@ namespace SDK_Log_Capture_Tool
                     txtLeakATEQ.Text = result.Parameters["LeakRate"].ToString("F3");
                     txtStatusATEQ.Text = result.Status;
                 }
+                else if(string.IsNullOrEmpty(txtISNATEQ.Text))
+                {
+                    txtPressureATEQ.Clear();
+                    txtLeakATEQ.Clear();
+                    txtStatusATEQ.Clear();
+                }
             }
             catch (Exception ex)
             {
@@ -109,7 +115,12 @@ namespace SDK_Log_Capture_Tool
             if (!string.IsNullOrWhiteSpace(txt_loop1ISNWater.Text))
             {
                 loop1_STARTTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                this.btn_loop1UploadSFISWater.Enabled = true;
+                btn_loop1UploadSFISWater.Enabled = true;
+            }
+            else
+            {
+                loop1_STARTTime.Clear();
+                btn_loop1UploadSFISWater.Enabled = false;
             }
         }
 
@@ -118,7 +129,12 @@ namespace SDK_Log_Capture_Tool
             if (!string.IsNullOrWhiteSpace(txt_loop2ISNWater.Text))
             {
                 loop2_STARTTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                this.btn_loop2UploadSFISWater.Enabled = true;
+                btn_loop2UploadSFISWater.Enabled = true;
+            }
+            else
+            {
+                loop2_STARTTime.Clear();
+                btn_loop2UploadSFISWater.Enabled = false;
             }
         }
 
@@ -127,7 +143,12 @@ namespace SDK_Log_Capture_Tool
             if (!string.IsNullOrWhiteSpace(txt_loop3ISNWater.Text))
             {
                 loop3_STARTTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                this.btn_loop3UploadSFISWater.Enabled = true;
+                btn_loop3UploadSFISWater.Enabled = true;
+            }
+            else
+            {
+                loop3_STARTTime.Clear();
+                btn_loop3UploadSFISWater.Enabled = false;
             }
         }
 
@@ -136,7 +157,12 @@ namespace SDK_Log_Capture_Tool
             if (!string.IsNullOrWhiteSpace(txt_loop4ISNWater.Text))
             {
                 loop4_STARTTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                this.btn_loop4UploadSFISWater.Enabled = true;
+                btn_loop4UploadSFISWater.Enabled = true;
+            }
+            else
+            {
+                loop4_STARTTime.Clear();
+                btn_loop4UploadSFISWater.Enabled = false;
             }
         }
 
@@ -293,6 +319,91 @@ namespace SDK_Log_Capture_Tool
                     txt_loop4ISNWater.Clear();
                     loop4_STARTTime.Clear();
                     btn_loop4UploadSFISWater.Enabled = false;
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private void Allow_N2_Start(object sender, EventArgs e)
+        {
+            btn_start_N2Filler.Enabled = !string.IsNullOrEmpty(ISN_N2Filler.Text);
+        }
+
+        private void Reset_N2_Start(object sender, EventArgs e)
+        {
+            ISN_N2Filler.Clear();
+        }
+
+        private void N2_manual_CheckedChanged(object sender, EventArgs e)
+        {
+            if (btnN2_manual_radio.Checked)
+            {
+                N2_textBox1.ReadOnly = false;
+                N2_textBox2.ReadOnly = false;
+                N2_textBox3.ReadOnly = false;
+            }
+        }
+
+        private void Allow_N2_Upload(object sender, EventArgs e)
+        {
+            btn_N2_upload.Enabled = !string.IsNullOrEmpty(ISN_N2Filler.Text) &&
+                     !string.IsNullOrEmpty(N2_textBox1.Text) &&
+                     !string.IsNullOrEmpty(N2_textBox2.Text) &&
+                     !string.IsNullOrEmpty(N2_textBox3.Text);
+            try
+            {
+                if (btnN2_auto_radio.Checked && _monitor.TryGetResult(out var result) && !string.IsNullOrEmpty(ISN_N2Filler.Text))
+                {
+#if DEBUG
+                    Random rand = new Random();
+                    result.Parameters = new Dictionary<string, double> {
+                        { "Pressure", rand.NextDouble() * 5.0 },
+                        { "LeakRate", rand.NextDouble() * 0.1 },
+                        { "TestTime", rand.NextDouble() * 30.0 }
+                    };
+#endif
+                    N2_textBox1.Text = result.Parameters["Pressure"].ToString("F3");
+                    N2_textBox2.Text = result.Parameters["LeakRate"].ToString("F3");
+                    N2_textBox3.Text = result.Status;
+                }
+                else if (string.IsNullOrEmpty(ISN_N2Filler.Text))
+                {
+                    N2_textBox1.Clear();
+                    N2_textBox2.Clear();
+                    N2_textBox3.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Read Failed: {ex.Message}", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ISN_N2Filler.Clear();
+                N2_textBox1.Clear();
+                N2_textBox2.Clear();
+                N2_textBox3.Clear();
+                return;
+            }
+        }
+
+        private void N2_UploadSFIS_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string isn = ISN_N2Filler.Text.Trim();
+                string startTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Trim();
+                string 介質 = N2_textBox1.Text.Trim();
+                string 設定壓力 = N2_textBox2.Text.Trim();
+                string 產品壓力 = N2_textBox3.Text.Trim();
+
+                if (!string.IsNullOrEmpty(isn))
+                {
+                    N2filler_GridView.Rows.Add(isn, startTime, 介質, 設定壓力, 產品壓力);
+                    ISN_N2Filler.Clear();
+                    N2_textBox1.Clear();
+                    N2_textBox2.Clear();
+                    N2_textBox3.Clear();
+                    btn_N2_upload.Enabled = false;
                 }
             }
             catch (Exception)
