@@ -52,9 +52,6 @@ namespace SDK_Log_Capture_Tool
             this.label_ISN_F620 = new System.Windows.Forms.Label();
             this.Water_Bath_tabPage = new System.Windows.Forms.TabPage();
             this.dataGrid_Water = new System.Windows.Forms.DataGridView();
-            this.dataGrid_Water_ISN = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGrid_Water_StartTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGrid_Water_EndTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.group_loop4 = new System.Windows.Forms.GroupBox();
             this.btn_loop4ResetSFISWater = new System.Windows.Forms.Button();
             this.btn_loop4UploadSFISWater = new System.Windows.Forms.Button();
@@ -89,6 +86,29 @@ namespace SDK_Log_Capture_Tool
             this.label_hint_N2Filler = new System.Windows.Forms.Label();
             this.textBox_N2Filler = new System.Windows.Forms.TextBox();
             this.label_N2Filler = new System.Windows.Forms.Label();
+            this.N2filler_GridView = new System.Windows.Forms.DataGridView();
+            this.N2filler_groupBox = new System.Windows.Forms.GroupBox();
+            this.btnN2_auto_radio = new System.Windows.Forms.RadioButton();
+            this.btn_N2_upload = new System.Windows.Forms.Button();
+            this.lbl_N2_pressure = new System.Windows.Forms.Label();
+            this.btnN2_manual_radio = new System.Windows.Forms.RadioButton();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.dataGrid_Water_ISN = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Loop = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGrid_Water_StartTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGrid_Water_EndTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.介質 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.設定壓力 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.產品壓力 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.系統真空 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.壓差 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.進口壓力 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl.SuspendLayout();
             this.ATEQ_F620_TabPage.SuspendLayout();
             this.ATEQ_groupBox.SuspendLayout();
@@ -100,6 +120,8 @@ namespace SDK_Log_Capture_Tool
             this.group_loop2.SuspendLayout();
             this.group_loop1.SuspendLayout();
             this.N2_Filler_tabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.N2filler_GridView)).BeginInit();
+            this.N2filler_groupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
@@ -151,10 +173,10 @@ namespace SDK_Log_Capture_Tool
             this.is_auto.Checked = true;
             this.is_auto.Location = new System.Drawing.Point(78, 40);
             this.is_auto.Name = "is_auto";
-            this.is_auto.Size = new System.Drawing.Size(105, 22);
+            this.is_auto.Size = new System.Drawing.Size(108, 22);
             this.is_auto.TabIndex = 12;
             this.is_auto.TabStop = true;
-            this.is_auto.Text = "自動模式";
+            this.is_auto.Text = "Auto mode";
             this.is_auto.UseVisualStyleBackColor = true;
             this.is_auto.CheckedChanged += new System.EventHandler(this.is_auto_CheckedChanged);
             // 
@@ -183,10 +205,10 @@ namespace SDK_Log_Capture_Tool
             this.is_manual.AutoSize = true;
             this.is_manual.Location = new System.Drawing.Point(204, 40);
             this.is_manual.Name = "is_manual";
-            this.is_manual.Size = new System.Drawing.Size(105, 22);
+            this.is_manual.Size = new System.Drawing.Size(127, 22);
             this.is_manual.TabIndex = 13;
             this.is_manual.TabStop = true;
-            this.is_manual.Text = "手動模式";
+            this.is_manual.Text = "Manual mode";
             this.is_manual.UseVisualStyleBackColor = true;
             this.is_manual.CheckedChanged += new System.EventHandler(this.is_manual_CheckedChanged);
             // 
@@ -327,7 +349,7 @@ namespace SDK_Log_Capture_Tool
             this.Water_Bath_tabPage.Padding = new System.Windows.Forms.Padding(3);
             this.Water_Bath_tabPage.Size = new System.Drawing.Size(1506, 467);
             this.Water_Bath_tabPage.TabIndex = 1;
-            this.Water_Bath_tabPage.Text = "恒溫水槽";
+            this.Water_Bath_tabPage.Text = "Water Bath";
             this.Water_Bath_tabPage.UseVisualStyleBackColor = true;
             // 
             // dataGrid_Water
@@ -335,36 +357,15 @@ namespace SDK_Log_Capture_Tool
             this.dataGrid_Water.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGrid_Water.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGrid_Water_ISN,
+            this.Loop,
             this.dataGrid_Water_StartTime,
             this.dataGrid_Water_EndTime});
-            this.dataGrid_Water.Location = new System.Drawing.Point(955, 34);
+            this.dataGrid_Water.Location = new System.Drawing.Point(806, 34);
             this.dataGrid_Water.Name = "dataGrid_Water";
             this.dataGrid_Water.RowHeadersWidth = 62;
             this.dataGrid_Water.RowTemplate.Height = 31;
-            this.dataGrid_Water.Size = new System.Drawing.Size(515, 395);
+            this.dataGrid_Water.Size = new System.Drawing.Size(664, 395);
             this.dataGrid_Water.TabIndex = 14;
-            // 
-            // dataGrid_Water_ISN
-            // 
-            this.dataGrid_Water_ISN.HeaderText = "ISN";
-            this.dataGrid_Water_ISN.MinimumWidth = 8;
-            this.dataGrid_Water_ISN.Name = "dataGrid_Water_ISN";
-            this.dataGrid_Water_ISN.Width = 150;
-            // 
-            // dataGrid_Water_StartTime
-            // 
-            this.dataGrid_Water_StartTime.HeaderText = "Start Time";
-            this.dataGrid_Water_StartTime.MinimumWidth = 8;
-            this.dataGrid_Water_StartTime.Name = "dataGrid_Water_StartTime";
-            this.dataGrid_Water_StartTime.ToolTipText = "Start Time";
-            this.dataGrid_Water_StartTime.Width = 150;
-            // 
-            // dataGrid_Water_EndTime
-            // 
-            this.dataGrid_Water_EndTime.HeaderText = "End Time";
-            this.dataGrid_Water_EndTime.MinimumWidth = 8;
-            this.dataGrid_Water_EndTime.Name = "dataGrid_Water_EndTime";
-            this.dataGrid_Water_EndTime.Width = 150;
             // 
             // group_loop4
             // 
@@ -652,6 +653,8 @@ namespace SDK_Log_Capture_Tool
             // 
             // N2_Filler_tabPage
             // 
+            this.N2_Filler_tabPage.Controls.Add(this.N2filler_groupBox);
+            this.N2_Filler_tabPage.Controls.Add(this.N2filler_GridView);
             this.N2_Filler_tabPage.Controls.Add(this.btn_reset_N2Filler);
             this.N2_Filler_tabPage.Controls.Add(this.btn_start_N2Filler);
             this.N2_Filler_tabPage.Controls.Add(this.label_hint_N2Filler);
@@ -681,7 +684,7 @@ namespace SDK_Log_Capture_Tool
             this.btn_start_N2Filler.Name = "btn_start_N2Filler";
             this.btn_start_N2Filler.Size = new System.Drawing.Size(173, 46);
             this.btn_start_N2Filler.TabIndex = 8;
-            this.btn_start_N2Filler.Text = "Start Leak Test";
+            this.btn_start_N2Filler.Text = "Start Test";
             this.btn_start_N2Filler.UseVisualStyleBackColor = true;
             // 
             // label_hint_N2Filler
@@ -710,6 +713,212 @@ namespace SDK_Log_Capture_Tool
             this.label_N2Filler.TabIndex = 5;
             this.label_N2Filler.Text = "ISN (Scan Barcode):";
             // 
+            // N2filler_GridView
+            // 
+            this.N2filler_GridView.AllowUserToOrderColumns = true;
+            this.N2filler_GridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.N2filler_GridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1,
+            this.dataGridViewTextBoxColumn2,
+            this.介質,
+            this.設定壓力,
+            this.產品壓力,
+            this.系統真空,
+            this.壓差,
+            this.進口壓力});
+            this.N2filler_GridView.Location = new System.Drawing.Point(72, 89);
+            this.N2filler_GridView.Name = "N2filler_GridView";
+            this.N2filler_GridView.RowHeadersWidth = 62;
+            this.N2filler_GridView.RowTemplate.Height = 31;
+            this.N2filler_GridView.Size = new System.Drawing.Size(820, 349);
+            this.N2filler_GridView.TabIndex = 12;
+            // 
+            // N2filler_groupBox
+            // 
+            this.N2filler_groupBox.Controls.Add(this.btnN2_auto_radio);
+            this.N2filler_groupBox.Controls.Add(this.btn_N2_upload);
+            this.N2filler_groupBox.Controls.Add(this.lbl_N2_pressure);
+            this.N2filler_groupBox.Controls.Add(this.btnN2_manual_radio);
+            this.N2filler_groupBox.Controls.Add(this.textBox1);
+            this.N2filler_groupBox.Controls.Add(this.label2);
+            this.N2filler_groupBox.Controls.Add(this.textBox2);
+            this.N2filler_groupBox.Controls.Add(this.textBox3);
+            this.N2filler_groupBox.Controls.Add(this.label3);
+            this.N2filler_groupBox.Location = new System.Drawing.Point(944, 89);
+            this.N2filler_groupBox.Name = "N2filler_groupBox";
+            this.N2filler_groupBox.Size = new System.Drawing.Size(502, 349);
+            this.N2filler_groupBox.TabIndex = 16;
+            this.N2filler_groupBox.TabStop = false;
+            // 
+            // btnN2_auto_radio
+            // 
+            this.btnN2_auto_radio.AutoSize = true;
+            this.btnN2_auto_radio.Checked = true;
+            this.btnN2_auto_radio.Location = new System.Drawing.Point(78, 40);
+            this.btnN2_auto_radio.Name = "btnN2_auto_radio";
+            this.btnN2_auto_radio.Size = new System.Drawing.Size(108, 22);
+            this.btnN2_auto_radio.TabIndex = 12;
+            this.btnN2_auto_radio.TabStop = true;
+            this.btnN2_auto_radio.Text = "Auto mode";
+            this.btnN2_auto_radio.UseVisualStyleBackColor = true;
+            // 
+            // btn_N2_upload
+            // 
+            this.btn_N2_upload.Enabled = false;
+            this.btn_N2_upload.Location = new System.Drawing.Point(71, 288);
+            this.btn_N2_upload.Name = "btn_N2_upload";
+            this.btn_N2_upload.Size = new System.Drawing.Size(162, 46);
+            this.btn_N2_upload.TabIndex = 14;
+            this.btn_N2_upload.Text = "Upload to SFIS";
+            this.btn_N2_upload.UseVisualStyleBackColor = true;
+            // 
+            // lbl_N2_pressure
+            // 
+            this.lbl_N2_pressure.AutoSize = true;
+            this.lbl_N2_pressure.Location = new System.Drawing.Point(75, 108);
+            this.lbl_N2_pressure.Name = "lbl_N2_pressure";
+            this.lbl_N2_pressure.Size = new System.Drawing.Size(49, 18);
+            this.lbl_N2_pressure.TabIndex = 5;
+            this.lbl_N2_pressure.Text = "介質:";
+            // 
+            // btnN2_manual_radio
+            // 
+            this.btnN2_manual_radio.AutoSize = true;
+            this.btnN2_manual_radio.Location = new System.Drawing.Point(204, 40);
+            this.btnN2_manual_radio.Name = "btnN2_manual_radio";
+            this.btnN2_manual_radio.Size = new System.Drawing.Size(127, 22);
+            this.btnN2_manual_radio.TabIndex = 13;
+            this.btnN2_manual_radio.TabStop = true;
+            this.btnN2_manual_radio.Text = "Manual mode";
+            this.btnN2_manual_radio.UseVisualStyleBackColor = true;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(239, 105);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(191, 29);
+            this.textBox1.TabIndex = 6;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(75, 160);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(85, 18);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "設定壓力:";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(239, 157);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.ReadOnly = true;
+            this.textBox2.Size = new System.Drawing.Size(191, 29);
+            this.textBox2.TabIndex = 8;
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(239, 214);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.ReadOnly = true;
+            this.textBox3.Size = new System.Drawing.Size(191, 29);
+            this.textBox3.TabIndex = 10;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(75, 217);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(85, 18);
+            this.label3.TabIndex = 9;
+            this.label3.Text = "產品壓力:";
+            // 
+            // dataGrid_Water_ISN
+            // 
+            this.dataGrid_Water_ISN.HeaderText = "ISN";
+            this.dataGrid_Water_ISN.MinimumWidth = 8;
+            this.dataGrid_Water_ISN.Name = "dataGrid_Water_ISN";
+            this.dataGrid_Water_ISN.Width = 150;
+            // 
+            // Loop
+            // 
+            this.Loop.HeaderText = "Loop No.";
+            this.Loop.MinimumWidth = 8;
+            this.Loop.Name = "Loop";
+            this.Loop.Width = 150;
+            // 
+            // dataGrid_Water_StartTime
+            // 
+            this.dataGrid_Water_StartTime.HeaderText = "Start Time";
+            this.dataGrid_Water_StartTime.MinimumWidth = 8;
+            this.dataGrid_Water_StartTime.Name = "dataGrid_Water_StartTime";
+            this.dataGrid_Water_StartTime.ToolTipText = "Start Time";
+            this.dataGrid_Water_StartTime.Width = 150;
+            // 
+            // dataGrid_Water_EndTime
+            // 
+            this.dataGrid_Water_EndTime.HeaderText = "End Time";
+            this.dataGrid_Water_EndTime.MinimumWidth = 8;
+            this.dataGrid_Water_EndTime.Name = "dataGrid_Water_EndTime";
+            this.dataGrid_Water_EndTime.Width = 150;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.HeaderText = "ISN";
+            this.dataGridViewTextBoxColumn1.MinimumWidth = 8;
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.Width = 150;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.HeaderText = "Start Time";
+            this.dataGridViewTextBoxColumn2.MinimumWidth = 8;
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.Width = 150;
+            // 
+            // 介質
+            // 
+            this.介質.HeaderText = "介質";
+            this.介質.MinimumWidth = 8;
+            this.介質.Name = "介質";
+            this.介質.Width = 150;
+            // 
+            // 設定壓力
+            // 
+            this.設定壓力.HeaderText = "設定壓力";
+            this.設定壓力.MinimumWidth = 8;
+            this.設定壓力.Name = "設定壓力";
+            this.設定壓力.Width = 150;
+            // 
+            // 產品壓力
+            // 
+            this.產品壓力.HeaderText = "產品壓力";
+            this.產品壓力.MinimumWidth = 8;
+            this.產品壓力.Name = "產品壓力";
+            this.產品壓力.Width = 150;
+            // 
+            // 系統真空
+            // 
+            this.系統真空.HeaderText = "系統真空";
+            this.系統真空.MinimumWidth = 8;
+            this.系統真空.Name = "系統真空";
+            this.系統真空.Width = 150;
+            // 
+            // 壓差
+            // 
+            this.壓差.HeaderText = "壓差";
+            this.壓差.MinimumWidth = 8;
+            this.壓差.Name = "壓差";
+            this.壓差.Width = 150;
+            // 
+            // 進口壓力
+            // 
+            this.進口壓力.HeaderText = "進口壓力";
+            this.進口壓力.MinimumWidth = 8;
+            this.進口壓力.Name = "進口壓力";
+            this.進口壓力.Width = 150;
+            // 
             // SDK_Log_Capturer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -736,6 +945,9 @@ namespace SDK_Log_Capture_Tool
             this.group_loop1.PerformLayout();
             this.N2_Filler_tabPage.ResumeLayout(false);
             this.N2_Filler_tabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.N2filler_GridView)).EndInit();
+            this.N2filler_groupBox.ResumeLayout(false);
+            this.N2filler_groupBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -793,15 +1005,35 @@ namespace SDK_Log_Capture_Tool
         private System.Windows.Forms.Button btn_loop2ResetSFISWater;
         private System.Windows.Forms.Button btn_loop2UploadSFISWater;
         private System.Windows.Forms.Button btn_loop1ResetSFISWater;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGrid_Water_ISN;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGrid_Water_StartTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGrid_Water_EndTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn ISN;
         private System.Windows.Forms.DataGridViewTextBoxColumn Program;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn LeakRate;
         private System.Windows.Forms.DataGridViewTextBoxColumn Status_Column;
         private System.Windows.Forms.GroupBox ATEQ_groupBox;
+        private System.Windows.Forms.GroupBox N2filler_groupBox;
+        private System.Windows.Forms.RadioButton btnN2_auto_radio;
+        private System.Windows.Forms.Button btn_N2_upload;
+        private System.Windows.Forms.Label lbl_N2_pressure;
+        private System.Windows.Forms.RadioButton btnN2_manual_radio;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.DataGridView N2filler_GridView;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGrid_Water_ISN;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Loop;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGrid_Water_StartTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGrid_Water_EndTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn 介質;
+        private System.Windows.Forms.DataGridViewTextBoxColumn 設定壓力;
+        private System.Windows.Forms.DataGridViewTextBoxColumn 產品壓力;
+        private System.Windows.Forms.DataGridViewTextBoxColumn 系統真空;
+        private System.Windows.Forms.DataGridViewTextBoxColumn 壓差;
+        private System.Windows.Forms.DataGridViewTextBoxColumn 進口壓力;
     }
 }
 

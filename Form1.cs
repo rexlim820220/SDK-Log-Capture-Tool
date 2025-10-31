@@ -150,7 +150,7 @@ namespace SDK_Log_Capture_Tool
 
                 if (!string.IsNullOrEmpty(isn))
                 {
-                    dataGrid_Water.Rows.Add(isn, startTime, endTime);
+                    dataGrid_Water.Rows.Add(isn, "Loop 1", startTime, endTime);
                     txt_loop1ISNWater.Clear();
                     loop1_STARTTime.Clear();
                     btn_loop1UploadSFISWater.Enabled = false;
@@ -189,7 +189,7 @@ namespace SDK_Log_Capture_Tool
 
                 if (!string.IsNullOrEmpty(isn))
                 {
-                    dataGrid_Water.Rows.Add(isn, startTime, endTime);
+                    dataGrid_Water.Rows.Add(isn, "Loop 2", startTime, endTime);
                     txt_loop2ISNWater.Clear();
                     loop2_STARTTime.Clear();
                     btn_loop2UploadSFISWater.Enabled = false;
@@ -231,7 +231,7 @@ namespace SDK_Log_Capture_Tool
 
                 if (!string.IsNullOrEmpty(isn))
                 {
-                    dataGrid_Water.Rows.Add(isn, startTime, endTime);
+                    dataGrid_Water.Rows.Add(isn, "Loop 3", startTime, endTime);
                     txt_loop3ISNWater.Clear();
                     loop3_STARTTime.Clear();
                     btn_loop3UploadSFISWater.Enabled = false;
@@ -271,7 +271,7 @@ namespace SDK_Log_Capture_Tool
 
                 if (!string.IsNullOrEmpty(isn))
                 {
-                    dataGrid_Water.Rows.Add(isn, startTime, endTime);
+                    dataGrid_Water.Rows.Add(isn, "Loop 4", startTime, endTime);
                     txt_loop4ISNWater.Clear();
                     loop4_STARTTime.Clear();
                     btn_loop4UploadSFISWater.Enabled = false;
