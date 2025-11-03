@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Forms;
 using SDK_Log_Capture_Tool.ATEQ;
+using SDK_Log_Capture_Tool.SFIS;
 using System.Collections.Generic;
 
 namespace SDK_Log_Capture_Tool
@@ -8,10 +9,12 @@ namespace SDK_Log_Capture_Tool
     public partial class SDK_Log_Capturer : Form
     {
         private AteqStatusMonitor _monitor;
+        private SfisProcess sfis;
 
         public SDK_Log_Capturer()
         {
             InitializeComponent();
+            sfis = SfisProcess.GetInstance();
 
 #if DEBUG
             IAteqModbusTransport transport = new MockModbusTransport();
@@ -30,6 +33,7 @@ namespace SDK_Log_Capture_Tool
                 string pressure = txtPressureATEQ.Text.Trim();
                 string leak = txtLeakATEQ.Text.Trim();
                 string status = txtStatusATEQ.Text.Trim();
+                string ateqData = $"PRES:{pressure}|LEAK:{leak}|STAT:{status}";
 
                 if (!string.IsNullOrEmpty(isn))
                 {
@@ -39,10 +43,20 @@ namespace SDK_Log_Capture_Tool
                     txtLeakATEQ.Clear();
                     txtStatusATEQ.Clear();
                     btn_upload_SFIS.Enabled = false;
+
+                    if (sfis.UploadResult(isn, ateqData))
+                    {
+                        MessageBox.Show("上传成功");
+                    }
+                    else
+                    {
+                        MessageBox.Show("上传失败");
+                    }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                MessageBox.Show($"SFIS错误: {ex.ErrorCode} - {ex.Message}");
             }
         }
 
