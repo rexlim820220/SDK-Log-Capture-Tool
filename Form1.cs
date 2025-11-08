@@ -10,12 +10,10 @@ namespace SDK_Log_Capture_Tool
     {
         private AteqStatusMonitor _monitor;
         private SfisProcess sfis;
-
         public SDK_Log_Capturer()
         {
             InitializeComponent();
             sfis = SfisProcess.GetInstance();
-
 #if DEBUG
             IAteqModbusTransport transport = new MockModbusTransport();
 #else
@@ -43,20 +41,19 @@ namespace SDK_Log_Capture_Tool
                     txtLeakATEQ.Clear();
                     txtStatusATEQ.Clear();
                     btn_upload_SFIS.Enabled = false;
-
                     if (sfis.UploadResult(isn, ateqData))
                     {
-                        MessageBox.Show("上传成功");
+                        MessageBox.Show("Upload successful");
                     }
                     else
                     {
-                        MessageBox.Show("上传失败");
+                        MessageBox.Show("Upload failed");
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"SFIS错误: {ex.ErrorCode} - {ex.Message}");
+                MessageBox.Show($"SFIS error: {ex.Message}");
             }
         }
 
@@ -92,7 +89,7 @@ namespace SDK_Log_Capture_Tool
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Read Failed: {ex.Message}", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Read Failed: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtISNATEQ.Clear();
                 txtPressureATEQ.Clear();
                 txtLeakATEQ.Clear();
@@ -391,7 +388,7 @@ namespace SDK_Log_Capture_Tool
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Read Failed: {ex.Message}", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Read Failed: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 ISN_N2Filler.Clear();
                 N2_textBox1.Clear();
                 N2_textBox2.Clear();
