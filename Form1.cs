@@ -9,11 +9,10 @@ namespace SDK_Log_Capture_Tool
     public partial class SDK_Log_Capturer : Form
     {
         private AteqStatusMonitor _monitor;
-        private SfisProcess sfis;
+        private WebServiceFunc sfis;
         public SDK_Log_Capturer()
         {
             InitializeComponent();
-            sfis = SfisProcess.GetInstance();
 #if DEBUG
             IAteqModbusTransport transport = new MockModbusTransport();
 #else
