@@ -1,59 +1,68 @@
 using System;
-using System.Net;
 using System.Text;
-using System.Net.Sockets;
+using System.Configuration;
 using System.Threading.Tasks;
-using SDK_Log_Capture_Tool.com.borland.demo;
+using SDK_Log_Capture_Tool.pty.sfis.n1;
 
 namespace SDK_Log_Capture_Tool.SFIS
 {
     public class WebServiceFunc
     {
+        // ----------------- TCP ------------------------
         private readonly SyncTCPSocket _tcpClient;
         private const string ServerIP = "192.168.100.20";
         private const int ServerPort = 5000;
+        // ------------- Web Service --------------------
+        private readonly string _programId;
+        private readonly string _programPwd;
+        private readonly SFISTSPWebService _soapClient;
 
         public WebServiceFunc()
         {
             _tcpClient = new SyncTCPSocket(1000, 1000, 1000);
             try {
-                IPAddress ipAddress = IPAddress.Parse(ServerIP);
-                IPEndPoint endPoint = new IPEndPoint(ipAddress, ServerPort);
-                _tcpClient.Connect(endPoint);
+                _tcpClient.Connect(ServerIP, ServerPort);
             }
             catch (Exception ex){
                 Console.WriteLine($"連線失敗: {ex.Message}");
             }
+            // Web Service
+            _soapClient = new SFISTSPWebService();
+            _soapClient.Url = ConfigurationManager.AppSettings["SFISWebServiceUrl"] ?? "http://pty-sfwspd-n1.sfis.pegatroncorp.com/sfiswebservice/sfistspwebservice.asmx";
+            _soapClient.UseDefaultCredentials = true;
+            _soapClient.Timeout = 30000;
+            _programId = ConfigurationManager.AppSettings["SFISProgramId"] ?? "TSP_DTAUTO";
+            _programPwd = ConfigurationManager.AppSettings["SFISProgramPassword"] ?? ":e5T.?H3?n";
         }
 
         #region ----- 上傳主方法 -----
-
         /// <summary>
         /// 上傳 ISN + 資料，先走 Web Service，失敗則走 TCP
         /// </summary>
         public async Task<bool> UploadResultAsync(string isn, string data)
         {
-            // 1. 先嘗試 Web Service
             try
             {
-                // Borland 範例只有一個方法：EchoString
-                // 這裡示範把 isn + data 拼成一個字串送出
-                string payload = $"{isn}|{data}";
-                // string response = await _soapClient.EchoStringAsync(payload);
-                // return !string.IsNullOrEmpty(response);
-                return true;
+                string response = await Task.Run(() => _soapClient.WTSP_RESULT(
+                    programId: _programId,
+                    programPassword: _programPwd,
+                    ISN: isn,
+                    error: "",
+                    device: "980532",
+                    TSP: "TimBaking",
+                    data: data,
+                    status: 0,
+                    CPKFlag: "N"
+                )).ConfigureAwait(false);
+                return !string.IsNullOrEmpty(response) && response.Contains("OK");
             }
             catch (Exception ex)
             {
-                // 記錄失敗 (可自行換成 NLog)
                 Console.WriteLine($"[WebService] Upload failed: {ex.Message}");
+                return await UploadViaTcpAsync(isn, data);
             }
-
-            // 2. Web Service 失敗 → 改走 TCP
-            return await UploadViaTcpAsync(isn, data);
         }
 
-        // 同步版（如果 Form 裡不想用 async/await）
         public bool UploadResult(string isn, string data)
             => UploadResultAsync(isn, data).GetAwaiter().GetResult();
 
@@ -69,7 +78,6 @@ namespace SDK_Log_Capture_Tool.SFIS
                 catch { return false; }
             }
 
-            // 協議自訂：先傳 4 位元長度，再傳資料 (UTF8)
             string payload = $"{isn}|{data}";
             byte[] bytes = Encoding.UTF8.GetBytes(payload);
             byte[] len = BitConverter.GetBytes((UInt32)bytes.Length);
@@ -79,8 +87,7 @@ namespace SDK_Log_Capture_Tool.SFIS
                 await _tcpClient.SendAsync(len, 0, 4);
                 await _tcpClient.SendAsync(bytes, 0, bytes.Length);
 
-                // 接收回應 (簡單只收一個 byte 代表 OK=1 / NG=0)
-                byte[] ack = new byte[1];
+                byte[] ack = new byte[1]; // 接收回應 (簡單只收一個 byte 代表 OK=1 / NG=0)
                 int rc = await _tcpClient.ReceiveAsync(ack, 0, 1);
                 return rc == 1 && ack[0] == 1;
             }
@@ -89,7 +96,6 @@ namespace SDK_Log_Capture_Tool.SFIS
                 return false;
             }
         }
-
         #endregion
 
         public void Dispose()

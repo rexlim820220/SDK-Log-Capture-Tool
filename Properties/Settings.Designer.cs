@@ -32,5 +32,15 @@ namespace SDK_Log_Capture_Tool.Properties {
                 return ((string)(this["SDK_Log_Capture_Tool_com_borland_demo_Service1"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://pty-sfwspd-n1.sfis.pegatroncorp.com/sfiswebservice/sfistspwebservice.asmx")]
+        public string SDK_Log_Capture_Tool_pty_sfis_n1_SFISTSPWebService {
+            get {
+                return ((string)(this["SDK_Log_Capture_Tool_pty_sfis_n1_SFISTSPWebService"]));
+            }
+        }
     }
 }

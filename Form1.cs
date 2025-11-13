@@ -9,10 +9,15 @@ namespace SDK_Log_Capture_Tool
     public partial class SDK_Log_Capturer : Form
     {
         private AteqStatusMonitor _monitor;
-        private WebServiceFunc sfis;
+        private WebServiceFunc sfis_f620;
+        private WebServiceFunc sfis_water;
+        private WebServiceFunc sfis_n2filler;
         public SDK_Log_Capturer()
         {
             InitializeComponent();
+            sfis_f620 = new WebServiceFunc();
+            sfis_water = new WebServiceFunc();
+            sfis_n2filler = new WebServiceFunc();
 #if DEBUG
             IAteqModbusTransport transport = new MockModbusTransport();
 #else
@@ -40,7 +45,7 @@ namespace SDK_Log_Capture_Tool
                     txtLeakATEQ.Clear();
                     txtStatusATEQ.Clear();
                     btn_upload_SFIS.Enabled = false;
-                    if (sfis.UploadResult(isn, ateqData))
+                    if (sfis_f620.UploadResult(isn, ateqData))
                     {
                         MessageBox.Show("Upload successful");
                     }
@@ -183,6 +188,7 @@ namespace SDK_Log_Capture_Tool
                 string isn = txt_loop1ISNWater.Text.Trim();
                 string startTime = loop1_STARTTime.Text.Trim();
                 string endTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Trim();
+                string tomData = $"startTime:{startTime}|endTime:{endTime}";
 
                 if (!string.IsNullOrEmpty(isn))
                 {
@@ -190,6 +196,14 @@ namespace SDK_Log_Capture_Tool
                     txt_loop1ISNWater.Clear();
                     loop1_STARTTime.Clear();
                     btn_loop1UploadSFISWater.Enabled = false;
+                    if (sfis_water.UploadResult(isn, tomData))
+                    {
+                        MessageBox.Show("Upload successful");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Upload failed");
+                    }
                 }
             }
             catch (Exception)
@@ -222,6 +236,7 @@ namespace SDK_Log_Capture_Tool
                 string isn = txt_loop2ISNWater.Text.Trim();
                 string startTime = loop2_STARTTime.Text.Trim();
                 string endTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Trim();
+                string tomData = $"startTime:{startTime}|endTime:{endTime}";
 
                 if (!string.IsNullOrEmpty(isn))
                 {
@@ -229,6 +244,14 @@ namespace SDK_Log_Capture_Tool
                     txt_loop2ISNWater.Clear();
                     loop2_STARTTime.Clear();
                     btn_loop2UploadSFISWater.Enabled = false;
+                    if (sfis_water.UploadResult(isn, tomData))
+                    {
+                        MessageBox.Show("Upload successful");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Upload failed");
+                    }
                 }
             }
             catch (Exception)
@@ -264,6 +287,7 @@ namespace SDK_Log_Capture_Tool
                 string isn = txt_loop3ISNWater.Text.Trim();
                 string startTime = loop3_STARTTime.Text.Trim();
                 string endTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Trim();
+                string tomData = $"startTime:{startTime}|endTime:{endTime}";
 
                 if (!string.IsNullOrEmpty(isn))
                 {
@@ -271,6 +295,14 @@ namespace SDK_Log_Capture_Tool
                     txt_loop3ISNWater.Clear();
                     loop3_STARTTime.Clear();
                     btn_loop3UploadSFISWater.Enabled = false;
+                    if (sfis_water.UploadResult(isn, tomData))
+                    {
+                        MessageBox.Show("Upload successful");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Upload failed");
+                    }
                 }
             }
             catch (Exception)
@@ -304,6 +336,7 @@ namespace SDK_Log_Capture_Tool
                 string isn = txt_loop4ISNWater.Text.Trim();
                 string startTime = loop4_STARTTime.Text.Trim();
                 string endTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Trim();
+                string tomData = $"startTime:{startTime}|endTime:{endTime}";
 
                 if (!string.IsNullOrEmpty(isn))
                 {
@@ -311,6 +344,14 @@ namespace SDK_Log_Capture_Tool
                     txt_loop4ISNWater.Clear();
                     loop4_STARTTime.Clear();
                     btn_loop4UploadSFISWater.Enabled = false;
+                    if (sfis_water.UploadResult(isn, tomData))
+                    {
+                        MessageBox.Show("Upload successful");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Upload failed");
+                    }
                 }
             }
             catch (Exception)

@@ -37,6 +37,7 @@
       <HintPath>packages\EasyModbusTCP.5.6.0\lib\net40\EasyModbus.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.Services" />
@@ -75,6 +76,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <Compile Include="Web References\pty.sfis.n1\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -106,6 +112,11 @@
     <None Include="Web References\com.borland.demo\User.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
+    <None Include="Web References\pty.sfis.n1\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\pty.sfis.n1\sfistspwebservice.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -128,9 +139,23 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>SDK_Log_Capture_Tool_com_borland_demo_Service1</CachedSettingsPropName>
     </WebReferenceUrl>
+    <WebReferenceUrl Include="http://pty-sfwspd-n1.sfis.pegatroncorp.com/sfiswebservice/sfistspwebservice.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\pty.sfis.n1\</RelPath>
+      <UpdateFromURL>http://pty-sfwspd-n1.sfis.pegatroncorp.com/sfiswebservice/sfistspwebservice.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>SDK_Log_Capture_Tool_pty_sfis_n1_SFISTSPWebService</CachedSettingsPropName>
+    </WebReferenceUrl>
   </ItemGroup>
   <ItemGroup>
     <None Include="Web References\com.borland.demo\BorlandSampleService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web References\pty.sfis.n1\sfistspwebservice.disco" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
