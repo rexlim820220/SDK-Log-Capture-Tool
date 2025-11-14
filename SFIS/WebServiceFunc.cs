@@ -1,12 +1,13 @@
-using System;
+﻿using System;
 using System.Text;
+using System.Net.Http;
 using System.Configuration;
 using System.Threading.Tasks;
 using SDK_Log_Capture_Tool.pty.sfis.n1;
 
 namespace SDK_Log_Capture_Tool.SFIS
 {
-    public class WebServiceFunc
+    public class WebServiceFunc: ISfisService, IDisposable
     {
         // ----------------- TCP ------------------------
         private readonly SyncTCPSocket _tcpClient;
@@ -39,7 +40,7 @@ namespace SDK_Log_Capture_Tool.SFIS
         /// <summary>
         /// 上傳 ISN + 資料，先走 Web Service，失敗則走 TCP
         /// </summary>
-        public async Task<bool> UploadResultAsync(string isn, string data)
+        public async Task<SfisResult> UploadResultAsync(string isn, string data)
         {
             try
             {
@@ -54,16 +55,23 @@ namespace SDK_Log_Capture_Tool.SFIS
                     status: 0,
                     CPKFlag: "N"
                 )).ConfigureAwait(false);
-                return !string.IsNullOrEmpty(response) && response.Contains("OK");
+
+                bool isSuccess = !string.IsNullOrEmpty(response) && response.StartsWith("1");
+                return isSuccess
+                    ? SfisResult.Success(response)
+                    : SfisResult.Failure(response, "Response does not contain '1' and 'SUCCESSFUL'.");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"[WebService] Upload failed: {ex.Message}");
-                return await UploadViaTcpAsync(isn, data);
+                bool tcpSuccess = await UploadViaTcpAsync(isn, data).ConfigureAwait(false);
+                return tcpSuccess
+                    ? SfisResult.Success("TCP fallback successful.")
+                    : SfisResult.Failure("", $"Web and TCP upload failed: {ex.Message}");
             }
         }
 
-        public bool UploadResult(string isn, string data)
+        public SfisResult UploadResult(string isn, string data)
             => UploadResultAsync(isn, data).GetAwaiter().GetResult();
 
         #endregion

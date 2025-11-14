@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net;
 
 namespace SDK_Log_Capture_Tool.SFIS

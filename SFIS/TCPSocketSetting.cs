@@ -1,4 +1,4 @@
-namespace SDK_Log_Capture_Tool.SFIS
+﻿namespace SDK_Log_Capture_Tool.SFIS
 {
     public class TCPSocketSetting
     {
