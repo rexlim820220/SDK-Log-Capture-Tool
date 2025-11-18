@@ -9,16 +9,13 @@ namespace SDK_Log_Capture_Tool
     public partial class SDK_Log_Capturer : Form
     {
         private AteqStatusMonitor _monitor;
-        private SfisProcess sfis;
-        public SDK_Log_Capturer()
+        private readonly ISfisService _f620sfisService;
+        private readonly ISfisService _watersfisService;
+        public SDK_Log_Capturer(IAteqModbusTransport transport, ISfisService sfisService = null)
         {
             InitializeComponent();
-            sfis = SfisProcess.GetInstance();
-#if DEBUG
-            IAteqModbusTransport transport = new MockModbusTransport();
-#else
-            IAteqModbusTransport transport = new ModbusTransport("COM3");
-#endif
+            _f620sfisService  = sfisService ?? new WebServiceFunc(new F620_Sfis_Upload_Para());
+            _watersfisService = sfisService ?? new WebServiceFunc(new Water_Sfis_Upload_Para());           
             _monitor = new AteqStatusMonitor(transport);
         }
 
@@ -41,24 +38,25 @@ namespace SDK_Log_Capture_Tool
                     txtLeakATEQ.Clear();
                     txtStatusATEQ.Clear();
                     btn_upload_SFIS.Enabled = false;
-                    if (sfis.UploadResult(isn, ateqData))
-                    {
-                        MessageBox.Show("Upload successful");
-                    }
-                    else
-                    {
-                        MessageBox.Show("Upload failed");
-                    }
+
+                    SfisResult result = _f620sfisService.UploadResult(isn, ateqData);
+                    MessageBox.Show(
+                        result.IsSuccess
+                            ? $"Upload Successful: {result.Response}"
+                            : $"Upload Failed: {result.Response}\nError: {result.ErrorMessage}",
+                        result.IsSuccess ? "Success" : "Error"
+                    );
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"SFIS error: {ex.Message}");
+                MessageBox.Show($"Upexpected error: {ex.Message}", "Error");
             }
         }
 
         private void CheckTextBoxes(object sender, EventArgs e)
         {
+            AteqResult result;
             bool allFilled = !string.IsNullOrEmpty(txtISNATEQ.Text) &&
                      !string.IsNullOrEmpty(txtPressureATEQ.Text) &&
                      !string.IsNullOrEmpty(txtLeakATEQ.Text) &&
@@ -66,7 +64,7 @@ namespace SDK_Log_Capture_Tool
             btn_upload_SFIS.Enabled = allFilled;
             try
             {
-                if (is_auto.Checked && _monitor.TryGetResult(out var result) && !string.IsNullOrEmpty(txtISNATEQ.Text))
+                if (is_auto.Checked && _monitor.TryGetResult(out result) && !string.IsNullOrEmpty(txtISNATEQ.Text))
                 {
 #if DEBUG
                     Random rand = new Random();
@@ -184,6 +182,7 @@ namespace SDK_Log_Capture_Tool
                 string isn = txt_loop1ISNWater.Text.Trim();
                 string startTime = loop1_STARTTime.Text.Trim();
                 string endTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Trim();
+                string tomData = $"startTime:{startTime}|endTime:{endTime}";
 
                 if (!string.IsNullOrEmpty(isn))
                 {
@@ -191,10 +190,19 @@ namespace SDK_Log_Capture_Tool
                     txt_loop1ISNWater.Clear();
                     loop1_STARTTime.Clear();
                     btn_loop1UploadSFISWater.Enabled = false;
+
+                    SfisResult result = _watersfisService.UploadResult(isn, tomData);
+                    MessageBox.Show(
+                        result.IsSuccess
+                            ? $"Upload Successful: {result.Response}"
+                            : $"Upload Failed: {result.Response}\nError: {result.ErrorMessage}",
+                        result.IsSuccess? "Success": "Error"
+                    );
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                MessageBox.Show($"Upexpected error: {ex.Message}", "Error");
             }
         }
 
@@ -223,17 +231,27 @@ namespace SDK_Log_Capture_Tool
                 string isn = txt_loop2ISNWater.Text.Trim();
                 string startTime = loop2_STARTTime.Text.Trim();
                 string endTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Trim();
+                string tomData = $"startTime:{startTime}|endTime:{endTime}";
 
                 if (!string.IsNullOrEmpty(isn))
                 {
                     dataGrid_Water.Rows.Add(isn, "Loop 2", startTime, endTime);
-                    txt_loop2ISNWater.Clear();
-                    loop2_STARTTime.Clear();
-                    btn_loop2UploadSFISWater.Enabled = false;
+                    txt_loop1ISNWater.Clear();
+                    loop1_STARTTime.Clear();
+                    btn_loop1UploadSFISWater.Enabled = false;
+
+                    SfisResult result = _watersfisService.UploadResult(isn, tomData);
+                    MessageBox.Show(
+                        result.IsSuccess
+                            ? $"Upload Successful: {result.Response}"
+                            : $"Upload Failed: {result.Response}\nError: {result.ErrorMessage}",
+                        result.IsSuccess ? "Success" : "Error"
+                    );
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                MessageBox.Show($"Upexpected error: {ex.Message}", "Error");
             }
         }
 
@@ -265,18 +283,27 @@ namespace SDK_Log_Capture_Tool
                 string isn = txt_loop3ISNWater.Text.Trim();
                 string startTime = loop3_STARTTime.Text.Trim();
                 string endTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Trim();
+                string tomData = $"startTime:{startTime}|endTime:{endTime}";
 
                 if (!string.IsNullOrEmpty(isn))
                 {
                     dataGrid_Water.Rows.Add(isn, "Loop 3", startTime, endTime);
-                    txt_loop3ISNWater.Clear();
-                    loop3_STARTTime.Clear();
-                    btn_loop3UploadSFISWater.Enabled = false;
+                    txt_loop1ISNWater.Clear();
+                    loop1_STARTTime.Clear();
+                    btn_loop1UploadSFISWater.Enabled = false;
+
+                    SfisResult result = _watersfisService.UploadResult(isn, tomData);
+                    MessageBox.Show(
+                        result.IsSuccess
+                            ? $"Upload Successful: {result.Response}"
+                            : $"Upload Failed: {result.Response}\nError: {result.ErrorMessage}",
+                        result.IsSuccess ? "Success" : "Error"
+                    );
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //lblATEQStatus.Text = $"讀取狀態失敗: {ex.Message}";
+                MessageBox.Show($"Upexpected error: {ex.Message}", "Error");
             }
         }
 
@@ -305,17 +332,27 @@ namespace SDK_Log_Capture_Tool
                 string isn = txt_loop4ISNWater.Text.Trim();
                 string startTime = loop4_STARTTime.Text.Trim();
                 string endTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Trim();
+                string tomData = $"startTime:{startTime}|endTime:{endTime}";
 
                 if (!string.IsNullOrEmpty(isn))
                 {
                     dataGrid_Water.Rows.Add(isn, "Loop 4", startTime, endTime);
-                    txt_loop4ISNWater.Clear();
-                    loop4_STARTTime.Clear();
-                    btn_loop4UploadSFISWater.Enabled = false;
+                    txt_loop1ISNWater.Clear();
+                    loop1_STARTTime.Clear();
+                    btn_loop1UploadSFISWater.Enabled = false;
+
+                    SfisResult result = _watersfisService.UploadResult(isn, tomData);
+                    MessageBox.Show(
+                        result.IsSuccess
+                            ? $"Upload Successful: {result.Response}"
+                            : $"Upload Failed: {result.Response}\nError: {result.ErrorMessage}",
+                        result.IsSuccess ? "Success" : "Error"
+                    );
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                MessageBox.Show($"Upexpected error: {ex.Message}", "Error");
             }
         }
 
@@ -359,13 +396,14 @@ namespace SDK_Log_Capture_Tool
 
         private void Allow_N2_Upload(object sender, EventArgs e)
         {
+            AteqResult result;
             btn_N2_upload.Enabled = !string.IsNullOrEmpty(ISN_N2Filler.Text) &&
                      !string.IsNullOrEmpty(N2_textBox1.Text) &&
                      !string.IsNullOrEmpty(N2_textBox2.Text) &&
                      !string.IsNullOrEmpty(N2_textBox3.Text);
             try
             {
-                if (btnN2_auto_radio.Checked && _monitor.TryGetResult(out var result) && !string.IsNullOrEmpty(ISN_N2Filler.Text))
+                if (btnN2_auto_radio.Checked && _monitor.TryGetResult(out result) && !string.IsNullOrEmpty(ISN_N2Filler.Text))
                 {
 #if DEBUG
                     Random rand = new Random();

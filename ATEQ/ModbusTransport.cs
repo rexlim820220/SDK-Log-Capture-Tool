@@ -1,48 +1,57 @@
 using System;
-using EasyModbus;
+using NModbus;
+using NModbus.Serial;
 using System.IO.Ports;
 
 namespace SDK_Log_Capture_Tool.ATEQ
 {
     public class ModbusTransport : IAteqModbusTransport
     {
-        private readonly ModbusClient _client;
+        private readonly IModbusMaster _master;
+        private readonly SerialPort _port;
+        private const byte SlaveId = 1;  // address: 001
 
         public ModbusTransport(string portName)
         {
             if (string.IsNullOrWhiteSpace(portName))
                 throw new ArgumentException("Port name cannot be null or empty.", nameof(portName));
 
-            _client = new ModbusClient(portName);
+            _port = new SerialPort(portName)
+            {
+                BaudRate = 9600,
+                DataBits = 8,
+                Parity = Parity.Even,
+                StopBits = StopBits.One,
+                ReadTimeout = 2000,
+                WriteTimeout = 1000,
+                Handshake = Handshake.None
+            };
 
-            // 設定通訊參數
-            _client.Baudrate = 9600; // 設定鮑率為 9600
-            _client.Parity = Parity.Even; // 設定奇偶校驗位為 Even
-            _client.StopBits = StopBits.One; // 設定停止位為 1
-
-            // 由於 EasyModbus 預設資料位元就是 8，所以不需要特別設定
-            // 如果需要設定，可以透過 SerialPort 物件來操作，但 EasyModbus 已經封裝好了
-            // 8 個資料位元通常是 Modbus RTU 的標準設定
+            var adapter = new SerialPortAdapter(_port);
+            var factory = new ModbusFactory();
+            _master = factory.CreateRtuMaster(adapter);
         }
 
         public void Connect()
         {
-            if (!_client.Connected)
-                _client.Connect();
+            if (!_port.IsOpen)
+                _port.Open();
         }
 
         public void Disconnect()
         {
-            if (_client.Connected)
-                _client.Disconnect();
+            Disconnect();
         }
 
-        public int[] ReadHoldingRegisters(int startAddress, int count)
+        public int[] ReadHoldingRegisters(int address, int count)
         {
-            if (!_client.Connected)
-                throw new InvalidOperationException("Modbus client is not connected.");
-
-            return _client.ReadHoldingRegisters(startAddress, count);
+            Connect();
+            ushort startAddress = (ushort)address;
+            ushort[] result = _master.ReadHoldingRegisters(SlaveId, startAddress, (ushort)count);
+            int[] intResult = new int[result.Length];
+            for (int i = 0; i < result.Length; i++)
+                intResult[i] = result[i];
+            return intResult;
         }
     }
 }
