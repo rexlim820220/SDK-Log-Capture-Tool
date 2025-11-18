@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Text;
-using System.Net.Http;
 using System.Configuration;
 using System.Threading.Tasks;
 using SDK_Log_Capture_Tool.pty.sfis.n1;
@@ -14,26 +13,24 @@ namespace SDK_Log_Capture_Tool.SFIS
         private const string ServerIP = "192.168.100.20";
         private const int ServerPort = 5000;
         // ------------- Web Service --------------------
-        private readonly string _programId;
-        private readonly string _programPwd;
         private readonly SFISTSPWebService _soapClient;
+        private readonly ISfisUploadParameters _parameters;
 
-        public WebServiceFunc()
+        public WebServiceFunc(ISfisUploadParameters parameters = null)
         {
+            _parameters = parameters ?? new DefaultSfisUploadParameters();
             _tcpClient = new SyncTCPSocket(1000, 1000, 1000);
             try {
                 _tcpClient.Connect(ServerIP, ServerPort);
             }
-            catch (Exception ex){
-                Console.WriteLine($"連線失敗: {ex.Message}");
+            catch (Exception){
+                Console.WriteLine($"未成功透過TCP連線到SFIS，請檢察網路連線...");
             }
             // Web Service
             _soapClient = new SFISTSPWebService();
             _soapClient.Url = ConfigurationManager.AppSettings["SFISWebServiceUrl"] ?? "http://pty-sfwspd-n1.sfis.pegatroncorp.com/sfiswebservice/sfistspwebservice.asmx";
             _soapClient.UseDefaultCredentials = true;
             _soapClient.Timeout = 30000;
-            _programId = ConfigurationManager.AppSettings["SFISProgramId"] ?? "TSP_DTAUTO";
-            _programPwd = ConfigurationManager.AppSettings["SFISProgramPassword"] ?? ":e5T.?H3?n";
         }
 
         #region ----- 上傳主方法 -----
@@ -45,15 +42,15 @@ namespace SDK_Log_Capture_Tool.SFIS
             try
             {
                 string response = await Task.Run(() => _soapClient.WTSP_RESULT(
-                    programId: _programId,
-                    programPassword: _programPwd,
+                    programId: _parameters.ProgramId,
+                    programPassword: _parameters.ProgramPassword,
                     ISN: isn,
-                    error: "",
-                    device: "980532",
-                    TSP: "TimBaking",
+                    error: _parameters.Error,
+                    device: _parameters.Device,
+                    TSP: _parameters.TSP,
                     data: data,
-                    status: 0,
-                    CPKFlag: "N"
+                    status: _parameters.Status,
+                    CPKFlag: _parameters.CPKFlag
                 )).ConfigureAwait(false);
 
                 bool isSuccess = !string.IsNullOrEmpty(response) && response.StartsWith("1");
