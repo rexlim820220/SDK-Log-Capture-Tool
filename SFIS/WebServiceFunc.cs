@@ -6,64 +6,69 @@ using SDK_Log_Capture_Tool.pty.sfis.n1;
 
 namespace SDK_Log_Capture_Tool.SFIS
 {
-    public class WebServiceFunc
+    public class WebServiceFunc: ISfisService, IDisposable
     {
         // ----------------- TCP ------------------------
         private readonly SyncTCPSocket _tcpClient;
         private const string ServerIP = "192.168.100.20";
         private const int ServerPort = 5000;
         // ------------- Web Service --------------------
-        private readonly string _programId;
-        private readonly string _programPwd;
         private readonly SFISTSPWebService _soapClient;
+        private readonly ISfisUploadParameters _parameters;
 
-        public WebServiceFunc()
+        public WebServiceFunc(ISfisUploadParameters parameters = null)
         {
+            _parameters = parameters ?? new DefaultSfisUploadParameters();
             _tcpClient = new SyncTCPSocket(1000, 1000, 1000);
             try {
                 _tcpClient.Connect(ServerIP, ServerPort);
             }
-            catch (Exception ex){
-                Console.WriteLine($"連線失敗: {ex.Message}");
+            catch (Exception){
+                Console.WriteLine($"未成功透過TCP連線到SFIS，請檢察網路連線...");
             }
             // Web Service
             _soapClient = new SFISTSPWebService();
             _soapClient.Url = ConfigurationManager.AppSettings["SFISWebServiceUrl"] ?? "http://pty-sfwspd-n1.sfis.pegatroncorp.com/sfiswebservice/sfistspwebservice.asmx";
             _soapClient.UseDefaultCredentials = true;
             _soapClient.Timeout = 30000;
-            _programId = ConfigurationManager.AppSettings["SFISProgramId"] ?? "TSP_DTAUTO";
-            _programPwd = ConfigurationManager.AppSettings["SFISProgramPassword"] ?? ":e5T.?H3?n";
         }
 
         #region ----- 上傳主方法 -----
         /// <summary>
         /// 上傳 ISN + 資料，先走 Web Service，失敗則走 TCP
         /// </summary>
-        public async Task<bool> UploadResultAsync(string isn, string data)
+        public async Task<SfisResult> UploadResultAsync(string isn, string data)
         {
             try
             {
                 string response = await Task.Run(() => _soapClient.WTSP_RESULT(
-                    programId: _programId,
-                    programPassword: _programPwd,
+                    programId: _parameters.ProgramId,
+                    programPassword: _parameters.ProgramPassword,
                     ISN: isn,
-                    error: "",
-                    device: "980532",
-                    TSP: "TimBaking",
+                    error: _parameters.Error,
+                    device: _parameters.Device,
+                    TSP: _parameters.TSP,
                     data: data,
-                    status: 0,
-                    CPKFlag: "N"
+                    status: _parameters.Status,
+                    CPKFlag: _parameters.CPKFlag
                 )).ConfigureAwait(false);
-                return !string.IsNullOrEmpty(response) && response.Contains("OK");
+
+                bool isSuccess = !string.IsNullOrEmpty(response) && response.StartsWith("1");
+                return isSuccess
+                    ? SfisResult.Success(response)
+                    : SfisResult.Failure(response, "Response does not contain '1' and 'SUCCESSFUL'.");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"[WebService] Upload failed: {ex.Message}");
-                return await UploadViaTcpAsync(isn, data);
+                bool tcpSuccess = await UploadViaTcpAsync(isn, data).ConfigureAwait(false);
+                return tcpSuccess
+                    ? SfisResult.Success("TCP fallback successful.")
+                    : SfisResult.Failure("", $"Web and TCP upload failed: {ex.Message}");
             }
         }
 
-        public bool UploadResult(string isn, string data)
+        public SfisResult UploadResult(string isn, string data)
             => UploadResultAsync(isn, data).GetAwaiter().GetResult();
 
         #endregion
