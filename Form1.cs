@@ -15,8 +15,25 @@ namespace SDK_Log_Capture_Tool
         {
             InitializeComponent();
             _f620sfisService  = sfisService ?? new WebServiceFunc(new F620_Sfis_Upload_Para());
-            _watersfisService = sfisService ?? new WebServiceFunc(new Water_Sfis_Upload_Para());           
-            _monitor = new AteqStatusMonitor(transport);
+            _watersfisService = sfisService ?? new WebServiceFunc(new Water_Sfis_Upload_Para());
+            try
+            {
+                _monitor = new AteqStatusMonitor(transport);
+                int[] test = transport.ReadHoldingRegisters(0000, 1);
+                Console.WriteLine("ATEQ F620 connection success.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Unable to connect to ATEQ F620 leak tester! " +
+                    $"Please confirm that the COM Port is correct.\n\n" +
+                    $"{ex.Message}",
+                    "Instrument connection failed",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                _monitor = null;
+                return;
+            }
         }
 
         private void F620_UploadSFIS_Click(object sender, EventArgs e)
@@ -25,15 +42,17 @@ namespace SDK_Log_Capture_Tool
             {
                 string isn = txtISNATEQ.Text.Trim();
                 string startTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Trim();
+                string programID = txtProgramNumber.Text.Trim();
                 string pressure = txtPressureATEQ.Text.Trim();
                 string leak = txtLeakATEQ.Text.Trim();
                 string status = txtStatusATEQ.Text.Trim();
-                string ateqData = $"PRES:{pressure}|LEAK:{leak}|STAT:{status}";
+                string ateqData = $"TEST:{programID}|PRES:{pressure}|LEAK:{leak}|STAT:{status}";
 
                 if (!string.IsNullOrEmpty(isn))
                 {
                     dgvFIFOATEQ.Rows.Add(isn, startTime, pressure, leak, status);
                     txtISNATEQ.Clear();
+                    txtProgramNumber.Clear();
                     txtPressureATEQ.Clear();
                     txtLeakATEQ.Clear();
                     txtStatusATEQ.Clear();
@@ -56,38 +75,51 @@ namespace SDK_Log_Capture_Tool
 
         private void CheckTextBoxes(object sender, EventArgs e)
         {
-            AteqResult result;
+            AteqResult result = null;
             bool allFilled = !string.IsNullOrEmpty(txtISNATEQ.Text) &&
+                     !string.IsNullOrEmpty(txtProgramNumber.Text) &&
                      !string.IsNullOrEmpty(txtPressureATEQ.Text) &&
                      !string.IsNullOrEmpty(txtLeakATEQ.Text) &&
                      !string.IsNullOrEmpty(txtStatusATEQ.Text);
             btn_upload_SFIS.Enabled = allFilled;
             try
             {
-                if (is_auto.Checked && _monitor.TryGetResult(out result) && !string.IsNullOrEmpty(txtISNATEQ.Text))
+                if(!is_auto.Checked || string.IsNullOrEmpty(txtISNATEQ.Text))
                 {
+                    return;
+                }
 #if DEBUG
-                    Random rand = new Random();
-                    result.Parameters = new Dictionary<string, double> {
-                        { "Pressure", rand.NextDouble() * 5.0 },
-                        { "LeakRate", rand.NextDouble() * 0.1 },
-                        { "TestTime", rand.NextDouble() * 30.0 }
-                    };
-#endif
-                    txtPressureATEQ.Text = result.Parameters["Pressure"].ToString("F3");
-                    txtLeakATEQ.Text = result.Parameters["LeakRate"].ToString("F3");
-                    txtStatusATEQ.Text = result.Status;
-                }
-                else if(string.IsNullOrEmpty(txtISNATEQ.Text))
+                var r = new Random();
+                result = new AteqResult
                 {
-                    txtPressureATEQ.Clear();
-                    txtLeakATEQ.Clear();
-                    txtStatusATEQ.Clear();
-                }
+                    ProgramID = "Pr 006",
+                    Pressure = r.NextDouble() * 5.0,
+                    LeakRate = r.NextDouble() * 0.1,
+                    Status = "PASS",
+                };
+#else
+                _monitor.TryGetResult(out result);
+#endif
+                txtProgramNumber.Text = result.ProgramID;
+                txtPressureATEQ.Text = result.Parameters["Pressure"].ToString("F3");
+                txtLeakATEQ.Text = result.Parameters["LeakRate"].ToString("F3");
+                txtStatusATEQ.Text = result.Status;
+            }
+            catch (AteqException ex)
+            {
+                MessageBox.Show($"ATEQ 讀取失敗：{ex.Message}",
+                                "ATEQ F620 錯誤",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+                txtProgramNumber.Clear();
+                txtPressureATEQ.Clear();
+                txtLeakATEQ.Clear();
+                txtStatusATEQ.Clear();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Read Failed: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtProgramNumber.Clear();
                 txtISNATEQ.Clear();
                 txtPressureATEQ.Clear();
                 txtLeakATEQ.Clear();
@@ -95,11 +127,11 @@ namespace SDK_Log_Capture_Tool
                 return;
             }
         }
-
         private void is_manual_CheckedChanged(object sender, EventArgs e)
         {
             if (is_manual.Checked)
             {
+                txtProgramNumber.ReadOnly = false;
                 txtPressureATEQ.ReadOnly = false;
                 txtLeakATEQ.ReadOnly = false;
                 txtStatusATEQ.ReadOnly = false;
@@ -110,9 +142,11 @@ namespace SDK_Log_Capture_Tool
         {
             if (is_auto.Checked)
             {
+                txtProgramNumber.ReadOnly = true;
                 txtPressureATEQ.ReadOnly = true;
                 txtLeakATEQ.ReadOnly = true;
                 txtStatusATEQ.ReadOnly = true;
+                txtProgramNumber.Clear();
                 txtPressureATEQ.Clear();
                 txtLeakATEQ.Clear();
                 txtStatusATEQ.Clear();
@@ -277,9 +311,6 @@ namespace SDK_Log_Capture_Tool
         {
             try
             {
-                //bool isRunning = _ateqReader.IsTestRunning();
-                //lblATEQStatus.Text = isRunning ? "測試中…" : "已完成";
-
                 string isn = txt_loop3ISNWater.Text.Trim();
                 string startTime = loop3_STARTTime.Text.Trim();
                 string endTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Trim();
@@ -388,7 +419,7 @@ namespace SDK_Log_Capture_Tool
         {
             if (btnN2_manual_radio.Checked)
             {
-                N2_textBox1.ReadOnly = false;
+                N2_txtProgramNumber.ReadOnly = false;
                 N2_textBox2.ReadOnly = false;
                 N2_textBox3.ReadOnly = false;
             }
@@ -398,7 +429,7 @@ namespace SDK_Log_Capture_Tool
         {
             AteqResult result;
             btn_N2_upload.Enabled = !string.IsNullOrEmpty(ISN_N2Filler.Text) &&
-                     !string.IsNullOrEmpty(N2_textBox1.Text) &&
+                     !string.IsNullOrEmpty(N2_txtProgramNumber.Text) &&
                      !string.IsNullOrEmpty(N2_textBox2.Text) &&
                      !string.IsNullOrEmpty(N2_textBox3.Text);
             try
@@ -413,13 +444,13 @@ namespace SDK_Log_Capture_Tool
                         { "TestTime", rand.NextDouble() * 30.0 }
                     };
 #endif
-                    N2_textBox1.Text = result.Parameters["Pressure"].ToString("F3");
+                    N2_txtProgramNumber.Text = result.Parameters["Pressure"].ToString("F3");
                     N2_textBox2.Text = result.Parameters["LeakRate"].ToString("F3");
                     N2_textBox3.Text = result.Status;
                 }
                 else if (string.IsNullOrEmpty(ISN_N2Filler.Text))
                 {
-                    N2_textBox1.Clear();
+                    N2_txtProgramNumber.Clear();
                     N2_textBox2.Clear();
                     N2_textBox3.Clear();
                 }
@@ -428,7 +459,7 @@ namespace SDK_Log_Capture_Tool
             {
                 MessageBox.Show($"Read Failed: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 ISN_N2Filler.Clear();
-                N2_textBox1.Clear();
+                N2_txtProgramNumber.Clear();
                 N2_textBox2.Clear();
                 N2_textBox3.Clear();
                 return;
@@ -441,7 +472,7 @@ namespace SDK_Log_Capture_Tool
             {
                 string isn = ISN_N2Filler.Text.Trim();
                 string startTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Trim();
-                string 介質 = N2_textBox1.Text.Trim();
+                string 介質 = N2_txtProgramNumber.Text.Trim();
                 string 設定壓力 = N2_textBox2.Text.Trim();
                 string 產品壓力 = N2_textBox3.Text.Trim();
 
@@ -449,7 +480,7 @@ namespace SDK_Log_Capture_Tool
                 {
                     N2filler_GridView.Rows.Add(isn, startTime, 介質, 設定壓力, 產品壓力);
                     ISN_N2Filler.Clear();
-                    N2_textBox1.Clear();
+                    N2_txtProgramNumber.Clear();
                     N2_textBox2.Clear();
                     N2_textBox3.Clear();
                     btn_N2_upload.Enabled = false;

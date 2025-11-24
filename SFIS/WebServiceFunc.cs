@@ -24,7 +24,6 @@ namespace SDK_Log_Capture_Tool.SFIS
                 _tcpClient.Connect(ServerIP, ServerPort);
             }
             catch (Exception){
-                Console.WriteLine($"未成功透過TCP連線到SFIS，請檢察網路連線...");
             }
             // Web Service
             _soapClient = new SFISTSPWebService();

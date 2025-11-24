@@ -2,14 +2,15 @@ using System;
 using NModbus;
 using NModbus.Serial;
 using System.IO.Ports;
+using System.Threading;
 
 namespace SDK_Log_Capture_Tool.ATEQ
 {
     public class ModbusTransport : IAteqModbusTransport
     {
-        private readonly IModbusMaster _master;
+        private readonly IModbusSerialMaster _transport;
         private readonly SerialPort _port;
-        private const byte SlaveId = 1;  // address: 001
+        private const byte SlaveId = 1;
 
         public ModbusTransport(string portName)
         {
@@ -29,29 +30,49 @@ namespace SDK_Log_Capture_Tool.ATEQ
 
             var adapter = new SerialPortAdapter(_port);
             var factory = new ModbusFactory();
-            _master = factory.CreateRtuMaster(adapter);
+            _transport = factory.CreateRtuMaster(adapter);
+            _transport.Transport.Retries = 3;
+            _transport.Transport.WaitToRetryMilliseconds = 100;
+            _transport.Transport.ReadTimeout = 3000;
+            _transport.Transport.WriteTimeout = 3000;
         }
 
         public void Connect()
         {
             if (!_port.IsOpen)
-                _port.Open();
+            {
+                try { _port.Open(); }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Cannot open COM Port { _port.PortName }: {ex.Message}");
+                }
+            }
         }
 
         public void Disconnect()
         {
-            Disconnect();
+            _port?.Close();
         }
 
-        public int[] ReadHoldingRegisters(int address, int count)
+        public int[] ReadHoldingRegisters(int startAddress, int count)
         {
             Connect();
-            ushort startAddress = (ushort)address;
-            ushort[] result = _master.ReadHoldingRegisters(SlaveId, startAddress, (ushort)count);
-            int[] intResult = new int[result.Length];
-            for (int i = 0; i < result.Length; i++)
-                intResult[i] = result[i];
-            return intResult;
+            _port.DiscardInBuffer();
+            _port.DiscardOutBuffer();
+            Thread.Sleep(60);
+
+            try
+            {
+                ushort[] data = _transport.ReadHoldingRegisters(SlaveId, (ushort)startAddress, (ushort)count);
+
+                Thread.Sleep(60);
+
+                return Array.ConvertAll(data, x => (int)x);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Modbus 讀取失敗 (Address={startAddress}, Count={count}): {ex.Message}", ex);
+            }
         }
     }
 }

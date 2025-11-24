@@ -2,14 +2,23 @@ using System.Collections.Generic;
 
 namespace SDK_Log_Capture_Tool.ATEQ
 {
-    class AteqResult
+    public class AteqResult
     {
-        public int ResultCode { get; set; } //0~3
-        public Dictionary<string, double> Parameters { get; set; } = new Dictionary<string, double>();
+        public string ProgramID { get; set; }
         public double Pressure { get; set; }
         public double LeakRate { get; set; }
-        public double TestTime { get; set; }
+        public int ResultCode { get; set; }
         public bool HasAlarm { get; set; }
-        public string Status { get; set; } //"PASS", "FAIL", "RUNNING", "IDLE"
+        public string Status { get; set; }
+        public Dictionary<string, double> Parameters { get; set; }
+
+        public AteqResult()
+        {
+            Parameters = new Dictionary<string, double>
+            {
+                ["Pressure"] = Pressure,
+                ["LeakRate"] = LeakRate
+            };
+        }
     }
 }

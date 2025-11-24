@@ -42,9 +42,6 @@
     <StartupObject>SDK_Log_Capture_Tool.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EasyModbus, Version=5.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>.\EasyModbus.dll</HintPath>
-    </Reference>
     <Reference Include="NModbus, Version=3.0.81.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\NModbus.3.0.81\lib\net46\NModbus.dll</HintPath>
     </Reference>
@@ -68,7 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ATEQ\AteqModbusRtuTransport.cs" />
+    <Compile Include="ATEQ\AteqException.cs" />
     <Compile Include="ATEQ\AteqResult.cs" />
     <Compile Include="ATEQ\AteqStatusMonitor.cs" />
     <Compile Include="ATEQ\IAteqModbusTransport.cs" />
