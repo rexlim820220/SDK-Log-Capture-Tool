@@ -14,11 +14,13 @@ namespace SDK_Log_Capture_Tool.ATEQ
 
         public AteqResult()
         {
-            Parameters = new Dictionary<string, double>
-            {
-                ["Pressure"] = Pressure,
-                ["LeakRate"] = LeakRate
-            };
+            Parameters = new Dictionary<string, double>();
+        }
+
+        public void UpdateParameters()
+        {
+            Parameters["Pressure"] = Pressure;
+            Parameters["LeakRate"] = LeakRate;
         }
     }
 }

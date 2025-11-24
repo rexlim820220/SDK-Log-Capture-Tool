@@ -209,7 +209,7 @@ namespace SDK_Log_Capture_Tool
             this.ATEQ_lblPressure.Name = "ATEQ_lblPressure";
             this.ATEQ_lblPressure.Size = new System.Drawing.Size(68, 12);
             this.ATEQ_lblPressure.TabIndex = 5;
-            this.ATEQ_lblPressure.Text = "Pressure (Pa):";
+            this.ATEQ_lblPressure.Text = "Pressure (bar):";
             // 
             // is_manual
             // 
@@ -242,7 +242,7 @@ namespace SDK_Log_Capture_Tool
             this.ATEQ_lbl_LeakRate.Name = "ATEQ_lbl_LeakRate";
             this.ATEQ_lbl_LeakRate.Size = new System.Drawing.Size(105, 12);
             this.ATEQ_lbl_LeakRate.TabIndex = 7;
-            this.ATEQ_lbl_LeakRate.Text = "Leak Rate (cm³/min):";
+            this.ATEQ_lbl_LeakRate.Text = "Leak Rate (Pa):";
             // 
             // txtLeakATEQ
             // 

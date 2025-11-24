@@ -67,7 +67,24 @@ namespace SDK_Log_Capture_Tool.ATEQ
 
                 Thread.Sleep(60);
 
-                return Array.ConvertAll(data, x => (int)x);
+                int[] result = new int[data.Length];
+
+                bool isStatusWord = (startAddress == 8708 && count == 1);
+
+                for (int i = 0; i < data.Length; i++)
+                {
+                    if (isStatusWord)
+                    {
+                        ushort swapped = (ushort)((data[i] << 8) | (data[i] >> 8));
+                        result[i] = swapped;
+                    }
+                    else
+                    {
+                        result[i] = data[i];
+                    }
+                }
+
+                return result;
             }
             catch (Exception ex)
             {
