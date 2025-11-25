@@ -37,7 +37,7 @@ namespace SDK_Log_Capture_Tool.ATEQ
                     throw new AteqException("測試尚未開始(Cycle End Bit = 0)!");
 
                 bool pass = (status & (1 << 0)) != 0;
-                bool failFlow = (status & 0b0110) != 0;
+                bool failFlow = (status & 0x06) != 0;
                 bool alarm = (status & (1 << 3)) != 0;
                 bool pressureErr = (status & (1 << 4)) != 0;
                 // 獲取測試名稱 (0x2201)
@@ -55,7 +55,6 @@ namespace SDK_Log_Capture_Tool.ATEQ
                     HasAlarm = alarm,
                     Status = pass ? "PASS" : "FAIL"
                 };
-                result.UpdateParameters();
                 Console.WriteLine($"Test Item is Pr00{ToProgramNumber(testItenName[0])}");
                 Console.WriteLine($"Pressure is {ToValue32Bit(pressureRaw[0], pressureRaw[1])}");
                 Console.WriteLine($"LeakRate is {ToValue32Bit(leakRaw[0], leakRaw[1])}");

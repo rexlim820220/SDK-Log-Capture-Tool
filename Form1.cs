@@ -43,17 +43,17 @@ namespace SDK_Log_Capture_Tool
                 string isn = txtISNATEQ.Text.Trim();
                 string startTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Trim();
                 string programID = txtProgramNumber.Text.Trim();
-                string pressure = txtPressureATEQ.Text.Trim();
+                //string pressure = txtPressureATEQ.Text.Trim();
                 string leak = txtLeakATEQ.Text.Trim();
                 string status = txtStatusATEQ.Text.Trim();
-                string ateqData = $"TEST:{programID}|PRES:{pressure}|LEAK:{leak}|STAT:{status}";
+                string ateqData = $"TEST:{programID}|LEAK:{leak}|STAT:{status}";
 
                 if (!string.IsNullOrEmpty(isn))
                 {
-                    dgvFIFOATEQ.Rows.Add(isn, startTime, pressure, leak, status);
+                    dgvFIFOATEQ.Rows.Add(isn, startTime, programID, leak, status);
                     txtISNATEQ.Clear();
                     txtProgramNumber.Clear();
-                    txtPressureATEQ.Clear();
+                    //txtPressureATEQ.Clear();
                     txtLeakATEQ.Clear();
                     txtStatusATEQ.Clear();
                     btn_upload_SFIS.Enabled = false;
@@ -78,7 +78,7 @@ namespace SDK_Log_Capture_Tool
             AteqResult result = null;
             bool allFilled = !string.IsNullOrEmpty(txtISNATEQ.Text) &&
                      !string.IsNullOrEmpty(txtProgramNumber.Text) &&
-                     !string.IsNullOrEmpty(txtPressureATEQ.Text) &&
+                     //!string.IsNullOrEmpty(txtPressureATEQ.Text) &&
                      !string.IsNullOrEmpty(txtLeakATEQ.Text) &&
                      !string.IsNullOrEmpty(txtStatusATEQ.Text);
             btn_upload_SFIS.Enabled = allFilled;
@@ -100,8 +100,9 @@ namespace SDK_Log_Capture_Tool
 #else
                 _monitor.TryGetResult(out result);
 #endif
+                result.UpdateParameters();
                 txtProgramNumber.Text = result.ProgramID;
-                txtPressureATEQ.Text = result.Parameters["Pressure"].ToString("F3");
+                //txtPressureATEQ.Text = result.Parameters["Pressure"].ToString("F3");
                 txtLeakATEQ.Text = result.Parameters["LeakRate"].ToString("F3");
                 txtStatusATEQ.Text = result.Status;
             }
@@ -112,7 +113,7 @@ namespace SDK_Log_Capture_Tool
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Warning);
                 txtProgramNumber.Clear();
-                txtPressureATEQ.Clear();
+                //txtPressureATEQ.Clear();
                 txtLeakATEQ.Clear();
                 txtStatusATEQ.Clear();
             }
@@ -121,7 +122,7 @@ namespace SDK_Log_Capture_Tool
                 MessageBox.Show($"Read Failed: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtProgramNumber.Clear();
                 txtISNATEQ.Clear();
-                txtPressureATEQ.Clear();
+                //txtPressureATEQ.Clear();
                 txtLeakATEQ.Clear();
                 txtStatusATEQ.Clear();
                 return;
@@ -132,7 +133,7 @@ namespace SDK_Log_Capture_Tool
             if (is_manual.Checked)
             {
                 txtProgramNumber.ReadOnly = false;
-                txtPressureATEQ.ReadOnly = false;
+                //txtPressureATEQ.ReadOnly = false;
                 txtLeakATEQ.ReadOnly = false;
                 txtStatusATEQ.ReadOnly = false;
             }
@@ -143,11 +144,11 @@ namespace SDK_Log_Capture_Tool
             if (is_auto.Checked)
             {
                 txtProgramNumber.ReadOnly = true;
-                txtPressureATEQ.ReadOnly = true;
+                //txtPressureATEQ.ReadOnly = true;
                 txtLeakATEQ.ReadOnly = true;
                 txtStatusATEQ.ReadOnly = true;
                 txtProgramNumber.Clear();
-                txtPressureATEQ.Clear();
+                //txtPressureATEQ.Clear();
                 txtLeakATEQ.Clear();
                 txtStatusATEQ.Clear();
             }
