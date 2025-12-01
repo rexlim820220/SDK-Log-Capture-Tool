@@ -7,6 +7,8 @@ namespace SDK_Log_Capture_Tool.SFIS
         string ProgramId { get; }
         string ProgramPassword { get; }
         string Device { get; }
+        string UserID { get; }
+        string UserPassword { get; }
         string TSP { get; }
         int Status { get; }
         string CPKFlag { get; }
@@ -18,6 +20,8 @@ namespace SDK_Log_Capture_Tool.SFIS
         public virtual string ProgramId => ConfigurationManager.AppSettings["SFISProgramId"];
         public virtual string ProgramPassword => ConfigurationManager.AppSettings["SFISProgramPassword"];
         public virtual string Device => ConfigurationManager.AppSettings["SFISDevice"];
+        public virtual string UserID => ConfigurationManager.AppSettings["UserID"];
+        public virtual string UserPassword => ConfigurationManager.AppSettings["UserPassword"];
         public virtual string TSP => ConfigurationManager.AppSettings["SFISTSP"];
         public virtual int Status => int.Parse(ConfigurationManager.AppSettings["SFISStatus"]);
         public virtual string CPKFlag => ConfigurationManager.AppSettings["SFISCPKFlag"];
@@ -28,9 +32,11 @@ namespace SDK_Log_Capture_Tool.SFIS
     {
         public override string ProgramId => "TSP_DTAUTO";
         public override string ProgramPassword => ":e5T.?H3?n";
-        public override string Device => "980532";
-        public override string TSP => "TimBaking";
-        public override int Status => 0;
+        public override string Device => "980530";
+        public override string UserID => "LA0800494";
+        public override string UserPassword => "LA0800494";
+        public override string TSP => "F620";
+        public override int Status => 1;
         public override string CPKFlag => "N";
         public override string Error => "";
     }
@@ -41,7 +47,7 @@ namespace SDK_Log_Capture_Tool.SFIS
         public override string ProgramPassword => ":e5T.?H3?n";
         public override string Device => "980532";
         public override string TSP => "TimBaking";
-        public override int Status => 0;
+        public override int Status => 1;
         public override string CPKFlag => "N";
         public override string Error => "";
     }

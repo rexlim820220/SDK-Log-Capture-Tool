@@ -1,8 +1,10 @@
-using System;
-using System.Windows.Forms;
 using SDK_Log_Capture_Tool.ATEQ;
 using SDK_Log_Capture_Tool.SFIS;
+using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace SDK_Log_Capture_Tool
 {
@@ -11,28 +13,92 @@ namespace SDK_Log_Capture_Tool
         private AteqStatusMonitor _monitor;
         private readonly ISfisService _f620sfisService;
         private readonly ISfisService _watersfisService;
+        private readonly string logFilePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"SDK_Log_{DateTime.Now:yyyy_MM_dd}.txt");
         public SDK_Log_Capturer(IAteqModbusTransport transport, ISfisService sfisService = null)
         {
             InitializeComponent();
-            _f620sfisService  = sfisService ?? new WebServiceFunc(new F620_Sfis_Upload_Para());
+
+            _f620sfisService = sfisService ?? new WebServiceFunc(new F620_Sfis_Upload_Para());
             _watersfisService = sfisService ?? new WebServiceFunc(new Water_Sfis_Upload_Para());
+            _transport = transport;
+
+            this.Load += SDK_Log_Capturer_Load;
+        }
+
+        private IAteqModbusTransport _transport;
+
+        private async void SDK_Log_Capturer_Load(object sender, EventArgs e)
+        {
+            this.Load -= SDK_Log_Capturer_Load;
+
+            await InitializeAsync(_transport);
+        }
+
+        private async Task InitializeAsync(IAteqModbusTransport transport, CancellationToken token = default)
+        {
             try
             {
                 _monitor = new AteqStatusMonitor(transport);
-                int[] test = transport.ReadHoldingRegisters(0000, 1);
-                Console.WriteLine("ATEQ F620 connection success.");
+                int[] test = transport.ReadHoldingRegisters(0, 1);
+
+                ShowResult(true, "ATEQ Connection", "ATEQ F620 connection success.");
+                Console.WriteLine($"Default logFilePath is '{logFilePath}'");
+                // ===============================
+                //    Keep trying LoginAsync(1)
+                // ===============================
+                SfisResult loginResult;
+
+                while (true)
+                {
+                    token.ThrowIfCancellationRequested();
+
+                    loginResult = await _f620sfisService.LoginAsync(1);
+
+                    if (loginResult.IsSuccess)
+                        break;
+
+                    ShowResult(false, "SFIS Login Failed",
+                               loginResult.Response, loginResult.ErrorMessage);
+
+                    loginResult = await _f620sfisService.LoginAsync(2);
+                    await Task.Delay(1000, token);
+                }
+
+                ShowResult(true, "SFIS Login",
+                           $"Login successful: {loginResult.Response}");
+            }
+            catch (OperationCanceledException)
+            {
+                ShowResult(false, "Operation Canceled", "Login process was canceled.");
+                _monitor = null;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    $"Unable to connect to ATEQ F620 leak tester! " +
-                    $"Please confirm that the COM Port is correct.\n\n" +
-                    $"{ex.Message}",
-                    "Instrument connection failed",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                ShowResult(false, "Instrument Connection Failed",
+                          "Unable to connect to ATEQ F620 leak tester! " +
+                          "Please confirm that the COM Port is correct.\n\n" +
+                          ex.Message);
+
                 _monitor = null;
-                return;
+            }
+        }
+
+        private void ShowResult(bool isSuccess, string title, string message, string errorDetail = null)
+        {
+            string fullMessage = errorDetail == null
+                ? message
+                : $"{message}\nError: {errorDetail}";
+
+            Console.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {(isSuccess ? "OK" : "NG")} {title}: {fullMessage}");
+
+            if (this.IsHandleCreated && !this.IsDisposed)
+            {
+                this.BeginInvoke((Action)(() =>
+                {
+                    MessageBox.Show(this, fullMessage, title,
+                        MessageBoxButtons.OK,
+                        isSuccess ? MessageBoxIcon.Information : MessageBoxIcon.Error);
+                }));
             }
         }
 
@@ -41,36 +107,56 @@ namespace SDK_Log_Capture_Tool
             try
             {
                 string isn = txtISNATEQ.Text.Trim();
-                string startTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Trim();
+                if (string.IsNullOrEmpty(isn))
+                    return;
+
+                string startTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 string programID = txtProgramNumber.Text.Trim();
-                //string pressure = txtPressureATEQ.Text.Trim();
                 string leak = txtLeakATEQ.Text.Trim();
                 string status = txtStatusATEQ.Text.Trim();
                 string ateqData = $"TEST:{programID}|LEAK:{leak}|STAT:{status}";
-
-                if (!string.IsNullOrEmpty(isn))
+                
+                // Step 1: Check Route
+                var chkResult = _f620sfisService.CheckRouteAsync(isn).Result;
+                if (!chkResult.IsSuccess)
                 {
-                    dgvFIFOATEQ.Rows.Add(isn, startTime, programID, leak, status);
-                    txtISNATEQ.Clear();
-                    txtProgramNumber.Clear();
-                    //txtPressureATEQ.Clear();
-                    txtLeakATEQ.Clear();
-                    txtStatusATEQ.Clear();
-                    btn_upload_SFIS.Enabled = false;
-
-                    SfisResult result = _f620sfisService.UploadResult(isn, ateqData);
-                    MessageBox.Show(
-                        result.IsSuccess
-                            ? $"Upload Successful: {result.Response}"
-                            : $"Upload Failed: {result.Response}\nError: {result.ErrorMessage}",
-                        result.IsSuccess ? "Success" : "Error"
+                    ShowResult(false, "Check Route Failed", chkResult.Response, chkResult.ErrorMessage);
+                    dgvFIFOATEQ.Rows.Add(isn, startTime, programID, leak, status, "Check Route Failed");
+                    System.IO.File.AppendAllText(
+                        logFilePath,
+                        $"{DateTime.Now:yyyy-MM-dd HH:mm:ss}, {isn}, {startTime}, {programID}, {leak}, {status}, Check Route Failed" + Environment.NewLine
                     );
+                    return;
                 }
+                ShowResult(true, "Check Route Success", chkResult.Response);
+
+                // Step 2: Upload Result
+                SfisResult uploadResult = _f620sfisService.UploadResult(isn, ateqData);
+                ShowResult(uploadResult.IsSuccess,
+                           uploadResult.IsSuccess ? "Upload Successful" : "Upload Failed",
+                           uploadResult.Response,
+                           uploadResult.ErrorMessage);
+
+                dgvFIFOATEQ.Rows.Add(isn, startTime, programID, leak, status, uploadResult.IsSuccess ? "Upload Success" : "Upload Failed");
+                System.IO.File.AppendAllText(
+                    logFilePath,
+                    $"{DateTime.Now:yyyy-MM-dd HH:mm:ss}, {isn}, {startTime}, {programID}, {leak}, {status}, {uploadResult.IsSuccess}" + Environment.NewLine
+                );
+                ClearInputFields();
+                btn_upload_SFIS.Enabled = false;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Upexpected error: {ex.Message}", "Error");
+                ShowResult(false, "Unexpected Error", ex.Message);
             }
+        }
+        
+        private void ClearInputFields()
+        {
+            txtISNATEQ.Clear();
+            txtProgramNumber.Clear();
+            txtLeakATEQ.Clear();
+            txtStatusATEQ.Clear();
         }
 
         private void CheckTextBoxes(object sender, EventArgs e)

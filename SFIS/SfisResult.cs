@@ -21,7 +21,12 @@ namespace SDK_Log_Capture_Tool.SFIS
 
     public interface ISfisService
     {
+        Task<SfisResult> LoginAsync(int status);
+
         Task<SfisResult> UploadResultAsync(string isn, string data);
         SfisResult UploadResult(string isn, string data);
+
+        Task<SfisResult> CheckRouteAsync(string isn);
+        SfisResult CheckRoute(string isn);
     }
 }

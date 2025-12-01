@@ -6,31 +6,88 @@ using SDK_Log_Capture_Tool.pty.sfis.n1;
 
 namespace SDK_Log_Capture_Tool.SFIS
 {
-    public class WebServiceFunc: ISfisService, IDisposable
+    public class WebServiceFunc: ISfisService
     {
-        // ----------------- TCP ------------------------
-        private readonly SyncTCPSocket _tcpClient;
-        private const string ServerIP = "192.168.100.20";
-        private const int ServerPort = 5000;
         // ------------- Web Service --------------------
         private readonly SFISTSPWebService _soapClient;
         private readonly ISfisUploadParameters _parameters;
-
+        private bool _isLoggedIn = false;
         public WebServiceFunc(ISfisUploadParameters parameters = null)
         {
             _parameters = parameters ?? new DefaultSfisUploadParameters();
-            _tcpClient = new SyncTCPSocket(1000, 1000, 1000);
-            try {
-                _tcpClient.Connect(ServerIP, ServerPort);
-            }
-            catch (Exception){
-            }
             // Web Service
             _soapClient = new SFISTSPWebService();
             _soapClient.Url = ConfigurationManager.AppSettings["SFISWebServiceUrl"] ?? "http://pty-sfwspd-n1.sfis.pegatroncorp.com/sfiswebservice/sfistspwebservice.asmx";
             _soapClient.UseDefaultCredentials = true;
             _soapClient.Timeout = 30000;
         }
+
+        public async Task<SfisResult> LoginAsync(int _status)
+        {
+            if (_isLoggedIn)
+                return SfisResult.Success("Already logged in");
+
+            try
+            {
+                string response = await Task.Run(() => _soapClient.WTSP_LOGINOUT(
+                    programId: _parameters.ProgramId,
+                    programPassword: _parameters.ProgramPassword,
+                    op: "LA0800494",
+                    password: "LA0800494",
+                    device: _parameters.Device,
+                    TSP: _parameters.TSP,
+                    status: _status
+                ));
+
+                bool success = response.TrimStart().StartsWith("1");
+                if (success) _isLoggedIn = true;
+
+                return success
+                    ? SfisResult.Success(response)
+                    : SfisResult.Failure(response, "SFIS Login 失敗");
+            }
+            catch (Exception ex)
+            {
+                return SfisResult.Failure("", $"Login Exception: {ex.Message}");
+            }
+        }
+
+        public async Task<SfisResult> CheckRouteAsync(string isn)
+        {
+            if (!_isLoggedIn)
+            {
+                var loginResult = await LoginAsync(1);
+                if (!loginResult.IsSuccess)
+                    return SfisResult.Failure(loginResult.Response, "Error: Cannot call CHKROUTE when logged out");
+            }
+
+            try
+            {
+                string response = await Task.Run(() => _soapClient.WTSP_CHKROUTE(
+                    programId: _parameters.ProgramId,
+                    programPassword: _parameters.ProgramPassword,
+                    ISN: isn,
+                    device: _parameters.Device,
+                    checkFlag: _parameters.CPKFlag, // IMEI;MAC1;MAC2
+                    checkData: "12345;A00001;A00002",
+                    type: 1
+                )).ConfigureAwait(false);
+
+                bool isSuccess = response.StartsWith("1");
+                return isSuccess
+                    ? SfisResult.Success(response)
+                    : SfisResult.Failure(response, "Route validation error");
+            }
+            catch (Exception ex)
+            {
+                return SfisResult.Failure("", $"CHKROUTE Exception: {ex.Message}");
+            }
+        }
+
+        public SfisResult CheckRoute(string isn)
+            => CheckRouteAsync(isn).GetAwaiter().GetResult();
+
+
 
         #region ----- 上傳主方法 -----
         /// <summary>
@@ -60,10 +117,7 @@ namespace SDK_Log_Capture_Tool.SFIS
             catch (Exception ex)
             {
                 Console.WriteLine($"[WebService] Upload failed: {ex.Message}");
-                bool tcpSuccess = await UploadViaTcpAsync(isn, data).ConfigureAwait(false);
-                return tcpSuccess
-                    ? SfisResult.Success("TCP fallback successful.")
-                    : SfisResult.Failure("", $"Web and TCP upload failed: {ex.Message}");
+                return SfisResult.Failure("", $"Web and TCP upload failed: {ex.Message}");
             }
         }
 
@@ -71,40 +125,5 @@ namespace SDK_Log_Capture_Tool.SFIS
             => UploadResultAsync(isn, data).GetAwaiter().GetResult();
 
         #endregion
-
-        #region ----- TCP 實作 -----
-
-        private async Task<bool> UploadViaTcpAsync(string isn, string data)
-        {
-            if (!_tcpClient.IsConnected)
-            {
-                try { _tcpClient.Connect(ServerIP, ServerPort); }
-                catch { return false; }
-            }
-
-            string payload = $"{isn}|{data}";
-            byte[] bytes = Encoding.UTF8.GetBytes(payload);
-            byte[] len = BitConverter.GetBytes((UInt32)bytes.Length);
-
-            try
-            {
-                await _tcpClient.SendAsync(len, 0, 4);
-                await _tcpClient.SendAsync(bytes, 0, bytes.Length);
-
-                byte[] ack = new byte[1]; // 接收回應 (簡單只收一個 byte 代表 OK=1 / NG=0)
-                int rc = await _tcpClient.ReceiveAsync(ack, 0, 1);
-                return rc == 1 && ack[0] == 1;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-        #endregion
-
-        public void Dispose()
-        {
-            _tcpClient?.Dispose();
-        }
     }
 }

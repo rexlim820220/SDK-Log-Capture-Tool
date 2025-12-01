@@ -42,11 +42,6 @@ namespace SDK_Log_Capture_Tool
             this.txtStatusATEQ = new System.Windows.Forms.TextBox();
             this.ATEQ_lbl_Test_Status = new System.Windows.Forms.Label();
             this.dgvFIFOATEQ = new System.Windows.Forms.DataGridView();
-            this.ISN = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Program = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.LeakRate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Status_Column = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lblISNStatusATEQ = new System.Windows.Forms.Label();
             this.txtISNATEQ = new System.Windows.Forms.TextBox();
             this.label_ISN_F620 = new System.Windows.Forms.Label();
@@ -109,6 +104,12 @@ namespace SDK_Log_Capture_Tool
             this.label_hint_N2Filler = new System.Windows.Forms.Label();
             this.ISN_N2Filler = new System.Windows.Forms.TextBox();
             this.label_N2Filler = new System.Windows.Forms.Label();
+            this.ISN = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Program = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LeakRate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Status_Column = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SFISisPassed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl.SuspendLayout();
             this.ATEQ_F620_TabPage.SuspendLayout();
             this.ATEQ_groupBox.SuspendLayout();
@@ -170,7 +171,7 @@ namespace SDK_Log_Capture_Tool
             // lbltProgramNumber
             // 
             this.lbltProgramNumber.AutoSize = true;
-            this.lbltProgramNumber.Location = new System.Drawing.Point(76, 98);
+            this.lbltProgramNumber.Location = new System.Drawing.Point(85, 148);
             this.lbltProgramNumber.Name = "lbltProgramNumber";
             this.lbltProgramNumber.Size = new System.Drawing.Size(80, 18);
             this.lbltProgramNumber.TabIndex = 15;
@@ -178,7 +179,7 @@ namespace SDK_Log_Capture_Tool
             // 
             // txtProgramNumber
             // 
-            this.txtProgramNumber.Location = new System.Drawing.Point(240, 94);
+            this.txtProgramNumber.Location = new System.Drawing.Point(238, 144);
             this.txtProgramNumber.Name = "txtProgramNumber";
             this.txtProgramNumber.ReadOnly = true;
             this.txtProgramNumber.Size = new System.Drawing.Size(192, 29);
@@ -224,7 +225,7 @@ namespace SDK_Log_Capture_Tool
             // ATEQ_lbl_LeakRate
             // 
             this.ATEQ_lbl_LeakRate.AutoSize = true;
-            this.ATEQ_lbl_LeakRate.Location = new System.Drawing.Point(75, 182);
+            this.ATEQ_lbl_LeakRate.Location = new System.Drawing.Point(86, 207);
             this.ATEQ_lbl_LeakRate.Name = "ATEQ_lbl_LeakRate";
             this.ATEQ_lbl_LeakRate.Size = new System.Drawing.Size(118, 18);
             this.ATEQ_lbl_LeakRate.TabIndex = 7;
@@ -232,7 +233,7 @@ namespace SDK_Log_Capture_Tool
             // 
             // txtLeakATEQ
             // 
-            this.txtLeakATEQ.Location = new System.Drawing.Point(238, 179);
+            this.txtLeakATEQ.Location = new System.Drawing.Point(238, 204);
             this.txtLeakATEQ.Name = "txtLeakATEQ";
             this.txtLeakATEQ.ReadOnly = true;
             this.txtLeakATEQ.Size = new System.Drawing.Size(192, 29);
@@ -251,7 +252,7 @@ namespace SDK_Log_Capture_Tool
             // ATEQ_lbl_Test_Status
             // 
             this.ATEQ_lbl_Test_Status.AutoSize = true;
-            this.ATEQ_lbl_Test_Status.Location = new System.Drawing.Point(75, 264);
+            this.ATEQ_lbl_Test_Status.Location = new System.Drawing.Point(86, 264);
             this.ATEQ_lbl_Test_Status.Name = "ATEQ_lbl_Test_Status";
             this.ATEQ_lbl_Test_Status.Size = new System.Drawing.Size(90, 18);
             this.ATEQ_lbl_Test_Status.TabIndex = 9;
@@ -266,49 +267,14 @@ namespace SDK_Log_Capture_Tool
             this.Program,
             this.Column1,
             this.LeakRate,
-            this.Status_Column});
+            this.Status_Column,
+            this.SFISisPassed});
             this.dgvFIFOATEQ.Location = new System.Drawing.Point(72, 88);
             this.dgvFIFOATEQ.Name = "dgvFIFOATEQ";
             this.dgvFIFOATEQ.RowHeadersWidth = 62;
             this.dgvFIFOATEQ.RowTemplate.Height = 31;
-            this.dgvFIFOATEQ.Size = new System.Drawing.Size(820, 430);
+            this.dgvFIFOATEQ.Size = new System.Drawing.Size(814, 430);
             this.dgvFIFOATEQ.TabIndex = 11;
-            // 
-            // ISN
-            // 
-            this.ISN.HeaderText = "ISN";
-            this.ISN.MinimumWidth = 8;
-            this.ISN.Name = "ISN";
-            this.ISN.Width = 150;
-            // 
-            // Program
-            // 
-            this.Program.HeaderText = "Start Time";
-            this.Program.MinimumWidth = 8;
-            this.Program.Name = "Program";
-            this.Program.Width = 150;
-            // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "Program ID";
-            this.Column1.MinimumWidth = 8;
-            this.Column1.Name = "Column1";
-            this.Column1.Width = 150;
-            // 
-            // LeakRate
-            // 
-            this.LeakRate.HeaderText = "Leak Rate";
-            this.LeakRate.MinimumWidth = 8;
-            this.LeakRate.Name = "LeakRate";
-            this.LeakRate.Width = 150;
-            // 
-            // Status_Column
-            // 
-            this.Status_Column.HeaderText = "Status";
-            this.Status_Column.MinimumWidth = 8;
-            this.Status_Column.Name = "Status_Column";
-            this.Status_Column.ToolTipText = "Status";
-            this.Status_Column.Width = 150;
             // 
             // lblISNStatusATEQ
             // 
@@ -926,6 +892,49 @@ namespace SDK_Log_Capture_Tool
             this.label_N2Filler.TabIndex = 5;
             this.label_N2Filler.Text = "ISN (Scan Barcode):";
             // 
+            // ISN
+            // 
+            this.ISN.HeaderText = "ISN";
+            this.ISN.MinimumWidth = 8;
+            this.ISN.Name = "ISN";
+            this.ISN.Width = 150;
+            // 
+            // Program
+            // 
+            this.Program.HeaderText = "Start Time";
+            this.Program.MinimumWidth = 8;
+            this.Program.Name = "Program";
+            this.Program.Width = 150;
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Program ID";
+            this.Column1.MinimumWidth = 8;
+            this.Column1.Name = "Column1";
+            this.Column1.Width = 150;
+            // 
+            // LeakRate
+            // 
+            this.LeakRate.HeaderText = "Leak Rate";
+            this.LeakRate.MinimumWidth = 8;
+            this.LeakRate.Name = "LeakRate";
+            this.LeakRate.Width = 150;
+            // 
+            // Status_Column
+            // 
+            this.Status_Column.HeaderText = "F620 Status";
+            this.Status_Column.MinimumWidth = 8;
+            this.Status_Column.Name = "Status_Column";
+            this.Status_Column.ToolTipText = "Status";
+            this.Status_Column.Width = 150;
+            // 
+            // SFISisPassed
+            // 
+            this.SFISisPassed.HeaderText = "SFIS Status";
+            this.SFISisPassed.MinimumWidth = 8;
+            this.SFISisPassed.Name = "SFISisPassed";
+            this.SFISisPassed.Width = 150;
+            // 
             // SDK_Log_Capturer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -1041,6 +1050,7 @@ namespace SDK_Log_Capture_Tool
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn LeakRate;
         private System.Windows.Forms.DataGridViewTextBoxColumn Status_Column;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SFISisPassed;
     }
 }
 
