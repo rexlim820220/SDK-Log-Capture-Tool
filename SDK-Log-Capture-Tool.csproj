@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>SDK_Log_Capture_Tool</RootNamespace>
     <AssemblyName>SDK-Log-Capture-Tool</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -42,6 +42,9 @@
     <StartupObject>SDK_Log_Capture_Tool.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EasyModbus, Version=5.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\EasyModbusTCP.5.6.0\lib\net40\EasyModbus.dll</HintPath>
+    </Reference>
     <Reference Include="NModbus, Version=3.0.81.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\NModbus.3.0.81\lib\net46\NModbus.dll</HintPath>
     </Reference>
@@ -77,6 +80,10 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="N2filler\ModbusClient.cs" />
+    <Compile Include="N2filler\ModbusException.cs" />
+    <Compile Include="N2filler\PressureReader.cs" />
+    <Compile Include="N2filler\PressureResult.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SFIS\ISfisUploadParameters.cs" />

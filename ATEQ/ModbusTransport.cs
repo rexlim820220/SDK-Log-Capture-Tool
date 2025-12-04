@@ -88,7 +88,7 @@ namespace SDK_Log_Capture_Tool.ATEQ
             }
             catch (Exception ex)
             {
-                throw new Exception($"Modbus 讀取失敗 (Address={startAddress}, Count={count}): {ex.Message}", ex);
+                throw new Exception($"Modbus read failed (Address={startAddress}, Count={count}): {ex.Message}", ex);
             }
         }
     }

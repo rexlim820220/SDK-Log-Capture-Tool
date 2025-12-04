@@ -22,6 +22,7 @@ namespace SDK_Log_Capture_Tool.SFIS
             _soapClient.Timeout = 30000;
         }
 
+        #region ----- LOGIN 登入 -----
         public async Task<SfisResult> LoginAsync(int _status)
         {
             if (_isLoggedIn)
@@ -51,7 +52,9 @@ namespace SDK_Log_Capture_Tool.SFIS
                 return SfisResult.Failure("", $"Login Exception: {ex.Message}");
             }
         }
+        #endregion
 
+        #region ----- CHKROUTE 檢查路由 -----
         public async Task<SfisResult> CheckRouteAsync(string isn)
         {
             if (!_isLoggedIn)
@@ -86,7 +89,7 @@ namespace SDK_Log_Capture_Tool.SFIS
 
         public SfisResult CheckRoute(string isn)
             => CheckRouteAsync(isn).GetAwaiter().GetResult();
-
+        #endregion
 
 
         #region ----- 上傳主方法 -----

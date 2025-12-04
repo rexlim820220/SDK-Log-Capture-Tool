@@ -51,4 +51,15 @@ namespace SDK_Log_Capture_Tool.SFIS
         public override string CPKFlag => "N";
         public override string Error => "";
     }
+
+    public class N2_Sfis_Upload_Para : DefaultSfisUploadParameters
+    {
+        public override string ProgramId => "TSP_DTAUTO";
+        public override string ProgramPassword => ":e5T.?H3?n";
+        public override string Device => "980535";
+        public override string TSP => "CoolerMaster";
+        public override int Status => 1;
+        public override string CPKFlag => "N";
+        public override string Error => "";
+    }
 }
