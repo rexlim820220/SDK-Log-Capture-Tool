@@ -4,6 +4,6 @@ namespace SDK_Log_Capture_Tool.ATEQ
     {
         void Connect();
         void Disconnect();
-        int[] ReadHoldingRegisters(int address, int count);
+        int[] ReadHoldingRegisters(int startAddress, int count);
     }
 }
