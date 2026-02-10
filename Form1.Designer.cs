@@ -1,4 +1,4 @@
-﻿
+
 namespace SDK_Log_Capture_Tool
 {
     partial class SDK_Log_Capturer

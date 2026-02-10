@@ -1,11 +1,13 @@
-﻿using System;
-using System.Threading;
-using System.Windows.Forms;
-using System.Threading.Tasks;
 using SDK_Log_Capture_Tool.ATEQ;
-using SDK_Log_Capture_Tool.SFIS;
 using SDK_Log_Capture_Tool.ModbusTcp;
+using SDK_Log_Capture_Tool.SFIS;
+using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace SDK_Log_Capture_Tool
 {
@@ -18,6 +20,7 @@ namespace SDK_Log_Capture_Tool
         private readonly ISfisService _f620sfisService;
         private readonly ISfisService _watersfisService;
         private readonly ISfisService _n2sfisService;
+        private readonly List<decimal> _rostaLeakList = new List<decimal>();
         private readonly string logFilePath = $"D:\\F620_Log_{DateTime.Now:yyyy_MM_dd}.txt";
         public SDK_Log_Capturer(IAteqModbusTransport transport, ISfisService sfisService = null)
         {
@@ -153,23 +156,20 @@ namespace SDK_Log_Capture_Tool
         private void RefreshControlState()
         {
             bool hasISN = !string.IsNullOrEmpty(txtISNATEQ.Text);
-            
             check_isRosta.Enabled = hasISN;
 
             if (!check_isRosta.Checked)
             {
                 btn_Rosta_Fetch.Visible = false;
                 btn_upload_SFIS.Visible = true;
-                btn_upload_SFIS.Enabled = hasISN;
+                btn_upload_SFIS.Enabled = CheckInputDataValid();
                 return;
             }
-
-            bool isDataValid = CheckInputDataValid(); // 封裝您的 txtXXXX.Text 檢查
 
             if (current_rosta_step < rosta_target_count)
             {
                 btn_Rosta_Fetch.Visible = true;
-                btn_Rosta_Fetch.Enabled = isDataValid; // 只有資料齊全才能按 Fetch
+                btn_Rosta_Fetch.Enabled = hasISN;
                 btn_upload_SFIS.Visible = false;
             }
             else
@@ -179,6 +179,7 @@ namespace SDK_Log_Capture_Tool
                 btn_upload_SFIS.Enabled = true;
             }
         }
+
 
         private bool CheckInputDataValid()
         {
@@ -201,18 +202,18 @@ namespace SDK_Log_Capture_Tool
 
             try
             {
+                decimal leakValue = Convert.ToDecimal(result.Parameters["LeakRate"]);
                 txtProgramNumber.Text = result.ProgramID;
-                txtLeakATEQ.Text = result.Parameters["LeakRate"].ToString("F3");
+                txtLeakATEQ.Text = leakValue.ToString("F3");
                 txtStatusATEQ.Text = result.Status;
 
+                _rostaLeakList.Add(leakValue);
                 current_rosta_step++;
-
-                // 3. 執行您的資料暫存邏輯 (例如存入 List)
-                // StoreResultToTemp(result); 
 
                 if (current_rosta_step < rosta_target_count)
                 {
-                    ShowResult(true, "Progress", $"第 {current_rosta_step} 次數值已暫存，請進行下一次測量。");
+                    ShowResult(true, "Progress",
+                        $"第 {current_rosta_step} 次量測完成（Leak={leakValue:F3}），請進行下一次。");
                 }
                 else
                 {
@@ -248,7 +249,9 @@ namespace SDK_Log_Capture_Tool
 
                 string startTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 string programID = txtProgramNumber.Text.Trim();
-                string leak = txtLeakATEQ.Text.Trim();
+                string leak = check_isRosta.Checked
+                            ? BuildRostaLeakDisplay()
+                            : txtLeakATEQ.Text.Trim();
                 string status = txtStatusATEQ.Text.Trim();
                 string sfisStatus = status.Equals("PASS", StringComparison.OrdinalIgnoreCase)
                                     ? "1"
@@ -301,9 +304,35 @@ namespace SDK_Log_Capture_Tool
             }
             finally
             {
+                ResetRostaState();
                 ClearInputFields();
                 txtISNATEQ.Focus();
             }
+        }
+
+        private string BuildRostaLeakDisplay()
+        {
+            if (_rostaLeakList.Count == 0)
+                return txtLeakATEQ.Text;
+
+            var sb = new StringBuilder();
+            for (int i = 0; i < _rostaLeakList.Count; i++)
+            {
+                sb.AppendLine($"R{i + 1}: {_rostaLeakList[i]:F3}");
+            }
+            return sb.ToString().TrimEnd();
+        }
+
+        private void ResetRostaState()
+        {
+            current_rosta_step = 0;
+            _rostaLeakList.Clear();
+
+            check_isRosta.CheckedChanged -= IsRosta_Checked;
+            check_isRosta.Checked = false;
+            check_isRosta.CheckedChanged += IsRosta_Checked;
+
+            RefreshControlState();
         }
 
         private void ClearInputFields()
