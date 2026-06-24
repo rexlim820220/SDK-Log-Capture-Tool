@@ -1,4 +1,7 @@
 using System;
+using System.Net.Sockets;
+using NModbus.Device;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace SDK_Log_Capture_Tool.ATEQ
 {
@@ -6,79 +9,95 @@ namespace SDK_Log_Capture_Tool.ATEQ
     {
         private readonly IAteqModbusTransport _transport;
 
-        private const int StepCodeAddress = 0x0030;
-        private const int ResultAreaAddress = 0x9C61;
-        private const int ResultCodeAddress = 0x9C6D;
-        private const int AlarmBitmaskAddress = 0x9CB8;
+        private const int TestItemAddress = 8705;    //0x2201
+        private const int ResultCodeAddress = 8708;  //0x2204
+        private const int PressureLowAddress = 8710; //0x2206
+        private const int LeakRateLowAddress = 8714; //0x220A
 
         public AteqStatusMonitor(IAteqModbusTransport transport)
         {
+            if (transport == null)
+            {
+                throw new ArgumentNullException(nameof(transport));
+            }
             _transport = transport;
-            _transport.Connect();
-        }
-
-        public bool IsTestRunning()
-        {
-            int[] stepCode = _transport.ReadHoldingRegisters(StepCodeAddress, 12);
-            return (stepCode[4] & (1 << 5)) == 0;
-        }
-
-        public bool IsTestFinished()
-        {
-            int[] stepCode = _transport.ReadHoldingRegisters(StepCodeAddress, 12);
-            return (stepCode[4] & (1 << 5)) != 0;
         }
 
         public bool TryGetResult(out AteqResult result)
         {
             result = null;
 
-            if (!IsTestFinished())
-                return false;
-
-            int[] resultCodeRaw = _transport.ReadHoldingRegisters(ResultCodeAddress, 1);
-            int resultCode = resultCodeRaw[0];
-
-            if (resultCode == 0 || resultCode == 1)
-                return false;
-
-            int[] resultArea = _transport.ReadHoldingRegisters(ResultAreaAddress, 16);
-            int[] alarmRaw = _transport.ReadHoldingRegisters(AlarmBitmaskAddress, 1);
-            bool hasAlarm = alarmRaw[0] != 0;
-
-            result = new AteqResult
+            try
             {
-                Pressure = ConvertToFixedPoint(resultArea[0], resultArea[1]),
-                LeakRate = ConvertToFixedPoint(resultArea[2], resultArea[3]),
-                TestTime = ConvertToFixedPoint(resultArea[4], resultArea[5]),
-                ResultCode = resultCode,
-                HasAlarm = hasAlarm,
-                Status = GetStatusText(resultCode, hasAlarm)
-            };
+                // 讀取結果代碼 (0x2204)
+                int[] raw = _transport.ReadHoldingRegisters(ResultCodeAddress, 1);
+                int status = raw[0];
+                Console.WriteLine($"Test Status is {status} in decimal.");
+                if ((status & (1 << 5)) == 0)
+                    throw new AteqException("測試尚未開始(Cycle End Bit = 0)!");
 
-            return true;
+                bool pass = (status & (1 << 0)) != 0;
+                bool failFlow = (status & 0x06) != 0;
+                bool alarm = (status & (1 << 3)) != 0;
+                bool pressureErr = (status & (1 << 4)) != 0;
+                // 獲取測試名稱 (0x2201)
+                int[] testItenName = _transport.ReadHoldingRegisters(TestItemAddress, 2);
+                // 讀取壓力 (0x2206~0x2207)
+                int[] pressureRaw = _transport.ReadHoldingRegisters(PressureLowAddress, 4);
+                // 讀取洩漏率 (0x220A~0x220B)
+                int[] leakRaw = _transport.ReadHoldingRegisters(LeakRateLowAddress, 4);
+
+                result = new AteqResult
+                {
+                    ProgramID = $"Pr 00{ToProgramNumber(testItenName[0])}",
+                    Pressure = ToValue32Bit(pressureRaw[0], pressureRaw[1]),
+                    LeakRate = ToValue32Bit(leakRaw[0], leakRaw[1]),
+                    HasAlarm = alarm,
+                    Status = pass ? "PASS" : "FAIL"
+                };
+                Console.WriteLine($"Test Item is Pr00{ToProgramNumber(testItenName[0])}");
+                Console.WriteLine($"Pressure is {ToValue32Bit(pressureRaw[0], pressureRaw[1])}");
+                Console.WriteLine($"LeakRate is {ToValue32Bit(leakRaw[0], leakRaw[1])}");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (ex is AteqException)
+                    throw;
+                else
+                    throw new AteqException("無法從 ATEQ F620 取得資料", ex);
+            }
         }
 
-        private double ConvertToFixedPoint(int lowWord, int highWord)
+        public static int ToProgramNumber(int lowWord)
         {
+            int raw = lowWord;
+            return (raw / 256) + 1;
+        }
+
+        public static double ToValue32Bit(int lowWord, int highWord)
+        {
+            byte lowLSB = (byte)(lowWord & 0xFF);
+            byte lowMSB = (byte)((lowWord >> 8) & 0xFF);
+            byte highLSB = (byte)(highWord & 0xFF);
+            byte highMSB = (byte)((highWord >> 8) & 0xFF);
+
+            byte swappedHighMSB = highLSB;
+            byte swappedHighLSB = highMSB;
+            byte swappedLowMSB = lowLSB;
+            byte swappedLowLSB = lowMSB;
+
             byte[] bytes = new byte[4];
-            bytes[0] = (byte)(lowWord & 0xFF);
-            bytes[1] = (byte)(lowWord >> 8);
-            bytes[2] = (byte)(highWord & 0xFF);
-            bytes[3] = (byte)(highWord >> 8);
+            bytes[0] = swappedHighMSB;
+            bytes[1] = swappedHighLSB;
+            bytes[2] = swappedLowMSB;
+            bytes[3] = swappedLowLSB;
+
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(bytes);
+
             int raw = BitConverter.ToInt32(bytes, 0);
             return raw / 1000.0;
-        }
-
-        private string GetStatusText(int code, bool alarm)
-        {
-            if (code == 2 && !alarm)
-                return "PASS";
-            if ((code == 2 || code == 3) && alarm)
-                return "FAIL";
-            if (code == 1)
-                return "RUNNING";
-            return "IDLE";
         }
     }
 }

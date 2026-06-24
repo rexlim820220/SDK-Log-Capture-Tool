@@ -7,6 +7,8 @@ namespace SDK_Log_Capture_Tool.SFIS
         string ProgramId { get; }
         string ProgramPassword { get; }
         string Device { get; }
+        string UserID { get; }
+        string UserPassword { get; }
         string TSP { get; }
         int Status { get; }
         string CPKFlag { get; }
@@ -15,22 +17,38 @@ namespace SDK_Log_Capture_Tool.SFIS
 
     public class DefaultSfisUploadParameters: ISfisUploadParameters
     {
-        public virtual string ProgramId => ConfigurationManager.AppSettings["SFISProgramId"];
-        public virtual string ProgramPassword => ConfigurationManager.AppSettings["SFISProgramPassword"];
-        public virtual string Device => ConfigurationManager.AppSettings["SFISDevice"];
-        public virtual string TSP => ConfigurationManager.AppSettings["SFISTSP"];
-        public virtual int Status => int.Parse(ConfigurationManager.AppSettings["SFISStatus"]);
-        public virtual string CPKFlag => ConfigurationManager.AppSettings["SFISCPKFlag"];
-        public virtual string Error => ConfigurationManager.AppSettings["SFISError"];
+        private string GetLiveSetting(string key)
+        {
+            ConfigurationManager.RefreshSection("appSettings");
+            return ConfigurationManager.AppSettings[key];
+        }
+        public virtual string ProgramId => GetLiveSetting("SFISProgramId");
+        public virtual string ProgramPassword => GetLiveSetting("SFISProgramPassword");
+        public virtual string Device => GetLiveSetting("SFISDevice");
+        public virtual string UserID => GetLiveSetting("UserID");
+        public virtual string UserPassword => GetLiveSetting("UserPassword");
+        public virtual string TSP => GetLiveSetting("SFISTSP");
+        public virtual int Status
+        {
+            get
+            {
+                int.TryParse(GetLiveSetting("SFISStatus"), out int statusVal);
+                return statusVal == 0 ? 1 : statusVal;
+            }
+        }
+        public virtual string CPKFlag => GetLiveSetting("SFISCPKFlag");
+        public virtual string Error => GetLiveSetting("SFISError");
     }
 
     public class F620_Sfis_Upload_Para: DefaultSfisUploadParameters
     {
         public override string ProgramId => "TSP_DTAUTO";
         public override string ProgramPassword => ":e5T.?H3?n";
-        public override string Device => "980532";
-        public override string TSP => "TimBaking";
-        public override int Status => 0;
+        public override string Device => "980530";
+        public override string UserID => "LA0800494";
+        public override string UserPassword => "LA0800494";
+        public override string TSP => "F620";
+        public override int Status => 1;
         public override string CPKFlag => "N";
         public override string Error => "";
     }
@@ -40,8 +58,23 @@ namespace SDK_Log_Capture_Tool.SFIS
         public override string ProgramId => "TSP_DTAUTO";
         public override string ProgramPassword => ":e5T.?H3?n";
         public override string Device => "980532";
+        public override string UserID => "LA0800494";
+        public override string UserPassword => "LA0800494";
         public override string TSP => "TimBaking";
-        public override int Status => 0;
+        public override int Status => 1;
+        public override string CPKFlag => "N";
+        public override string Error => "";
+    }
+
+    public class N2_Sfis_Upload_Para : DefaultSfisUploadParameters
+    {
+        public override string ProgramId => "TSP_DTAUTO";
+        public override string ProgramPassword => ":e5T.?H3?n";
+        public override string Device => "980535";
+        public override string UserID => "LA0800494";
+        public override string UserPassword => "LA0800494";
+        public override string TSP => "CoolerMaster";
+        public override int Status => 1;
         public override string CPKFlag => "N";
         public override string Error => "";
     }
